@@ -3,10 +3,10 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
 
-public class BombCanvas extends JComponent {
+public class GameCanvas extends JComponent {
 	private int width, height;
 	
-	public BombCanvas(int w, int h) {
+	public GameCanvas(int w, int h) {
 		width = w;
 		height = h;
 		

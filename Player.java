@@ -1,48 +1,126 @@
-import java.awt.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.*;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.*;
 
-public class Player implements Object {
-	private double x;
-	private double y;
-	private double sizea;
-	private double sizeb;
-	
-	public Chopsticks(double x, double y, double sizea, double sizeb) {
-		this.x = x;
-		this.y = y;
-		this.sizea = sizea;
-		this.sizeb = sizeb;
-	}
-	
-	@Override
-	public void draw(Graphics2D g2d) {
-		AffineTransform restart = g2d.getTransform();
-		g2d.setTransform(restart);
-	}
-	
-	@Override
-	public double getX() {
-		return x;
-	}
-	
-	@Override
-	public double getY() {
-		return y;
-	}
-	
-	@Override
-	public double getWidth() {
-		return sizea;
-	}
-	
-	@Override
-	public double getHeight() {
-		return sizeb;
-	}
-	
-	@Override
-	public boolean isColliding(Object a) {
-		return!(this.x + this.width <= a.getX() || this.x >= a.getX() + a.getWidth() || this.y + this.height <= a.getY() || this.y >= a.getY() + a.getHeight() );
-	}
+public class Player implements Object{
+    private int x, y, width, height, HP, counter, spriteNum, spriteCount;
+    public BufferedImage chick1, chick2, spicy1, spicy2;
+    public BufferedImage image = null;
+    
+    public Player(int x, int y, int i){
+        this.x = x;
+        this.y = y;
+        width = 100;
+        height = 100;
+        HP = 1;
+        counter = i;
+        playerImage();
+        spriteNum = 1;
+        spriteCount = 0;
+        
+    }
+
+    public void playerImage(){
+        try{
+            chick1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Chick 1.png"));
+            chick2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Chick 2.png"));
+            spicy1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Spicy 1.png"));
+            spicy2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Spicy 2.png"));
+
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }    
+
+    public void moveH(int speed){
+        this.x += speed;
+    }
+
+    public void moveV(int speed){
+        this.y += speed;
+    }
+
+    public int getX(){
+        return x;
+    }
+
+    public int getY(){
+        return y;
+    }
+
+    public void setX(int n){
+        x = n;
+    }
+
+    public void setY(int n){
+        y = n;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public void getHit(int h){
+        HP -= h;
+
+    }
+
+    public void spriteChange(){
+        spriteCount ++;
+        if(spriteCount > 10){
+            if (spriteNum == 1){
+                spriteNum = 2;
+            } 
+            else if (spriteNum == 2){
+                spriteNum = 1;
+            }
+            spriteCount = 0;
+        }
+
+    }
+    // public getHP(){
+    //     return HP;
+    // }
+
+    // public void dies(){
+    //     //how do we make an object disappear but retain its records
+    // }
+
+    public boolean isColliding(Object r) {
+        return !(this.x + this.width <= r.getX() ||
+        this.x >= r.getX() + r.getWidth() ||
+        this.y + this.height <= r.getY() ||
+        this.y >= r.getY() + r.getHeight());
+        }
+
+    public void draw(Graphics2D g){
+        switch(counter) {
+        case 1:
+            if(spriteNum == 1){
+                image = chick1;
+            }
+            if(spriteNum == 2){
+                image = chick2;
+            }
+            break;
+
+        case 2:
+            if(spriteNum == 1){
+                image = spicy1;
+            }
+            if(spriteNum == 2){
+                image = spicy2;
+            }
+            break;
+        }
+        g.drawImage(image,x,y,width,height,null);
+    }
+
 }

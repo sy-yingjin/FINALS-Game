@@ -92,24 +92,30 @@ public class Player implements Object{
     // public void dies(){
     //     //how do we make an object disappear but retain its records
     // }
-
-    public boolean isColliding(Object r, int s) {
+	
+    public boolean isCollidingX(Object r, int s) {
         if (
-            this.x + s + this.width <= r.getX() ||
-            this.x + s >= r.getX() + r.getWidth() ||
-            this.y + s + this.height <= r.getY() ||
-            this.y + s >= r.getY() + r.getHeight()
+            this.x + s + this.width <= r.getX() || // left side
+            this.x + s >= r.getX() + r.getWidth() // right side
         ) {
             return false;
         }
         else {
             return true;
         }
-        // return !(this.x + this.width <= r.getX() ||
-        // this.x >= r.getX() + r.getWidth() ||
-        // this.y + this.height <= r.getY() ||
-        // this.y >= r.getY() + r.getHeight());
+    }
+	
+	public boolean isCollidingY(Object r, int s) {
+        if (
+            this.y + s + this.height <= r.getY() || // top side
+            this.y + s >= r.getY() + r.getHeight() // bottom side
+        ) {
+            return false;
         }
+        else {
+            return true;
+        }
+    }
 
     public void draw(Graphics2D g){
         switch(counter) {

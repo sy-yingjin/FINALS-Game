@@ -8,5 +8,4 @@ public interface Object {
 	int getWidth();
 	int getHeight();
 	
-	boolean isColliding(Object a, int s);
 }

@@ -14,7 +14,7 @@ public class GameFrame {
 	private JButton Controls;
 	private JPanel buttonsPanel;
 	private Timer animationTimer;
-	private int speed;
+	private int speed, width, height;
 	private boolean up, down, left, right, free;
 	private int playerID;
 	private Player me,enemy;
@@ -28,11 +28,13 @@ public class GameFrame {
 	// private WriteToServer wtsRunnable;
 
 	public GameFrame(int w, int h) {
+		width = w;
+		height = h;
 		frame = new JFrame();
 		gCanvas = new GameCanvas(w, h);
 		Start = new JButton("START");
 		Controls = new JButton("CONTROLS");
-		speed = 3;
+		speed = 25;
 		free = true;
 	}
 	
@@ -95,11 +97,9 @@ public class GameFrame {
 				switch(keyCode) {
 					case KeyEvent.VK_UP :
 						up = true;
-						// me.moveV(-speed);
 						break;
 					case KeyEvent.VK_DOWN :
 						down = true;
-						// me.moveV(speed);
 						break;
 					case KeyEvent.VK_LEFT :
 						left = true;
@@ -131,9 +131,8 @@ public class GameFrame {
 		};
 		contentPane.addKeyListener(kl);
 		contentPane.setFocusable(true);
-		
 	}
-
+	
 	private void setUpAnimationTimer() {
 		int interval = 50;
 		
@@ -141,29 +140,25 @@ public class GameFrame {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				unMoving = gCanvas.getUnmoving();
-					if(up) {
-						me.moveV(-speed);
-						me.spriteChange();
-					} else if(down) {
-						me.moveV(speed);
-						me.spriteChange();
-					} else if(left) {
-						me.moveH(-speed);
-						me.spriteChange();
-					} else if(right) {
-						me.moveH(speed);
-						me.spriteChange();
-					}	
-					gCanvas.repaint();				
-				 }
-				
-				
+				if(up) {
+					me.moveV(-speed);
+					me.spriteChange();
+				} else if(down) {
+					me.moveV(speed);
+					me.spriteChange();
+				} else if(left) {
+					me.moveH(-speed);
+					me.spriteChange();
+				} else if(right) {
+					me.moveH(speed);
+					me.spriteChange();
+				}
+				gCanvas.repaint();				
 			}
 		};
 		animationTimer = new Timer(interval, al);
 		animationTimer.start();
 	}
-	 //(me.getX() + me.getWidth() <= r.getX() || me.getX() >= r.getX() + r.getWidth() || this.y + this.height <= r.getY() || this.y >= r.getY() + r.getHeight())
 
 // //taken from choobtorials
 // 	private void connectToServer() {
@@ -184,14 +179,6 @@ public class GameFrame {
 // 			System.out.println("IOException from connectToServer()");
 // 		}
 // 	}
-	
-// 	// private class DrawingComponent extends JComponent {
-// 	// 	protected void paintComponent(Graphics g) {
-// 	// 		Graphics2D g2d = (Graphics2D) g;
-// 	// 		me.drawSprite(g2d);
-// 	// 		enemy.drawSprite(g2d);
-// 	// 	}
-// 	// }
 	
 // 	private class ReadFromServer implements Runnable {
 // 		private DataInputStream dataIn;

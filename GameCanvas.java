@@ -24,7 +24,7 @@ public class GameCanvas extends JComponent {
 		players.add(chick);
 		players.add(spicy);
 		//making crates (breakable) and blocks (not breakable)
-		c1 = new Crate(100,0,100,1);
+		c1 = new Crate(400,0,100,1);
 		c2 = new Crate(200,0,100,1);
 		c3 = new Crate(300,0,100,1);
 		c4 = new Crate(0,200,100,1);
@@ -32,7 +32,7 @@ public class GameCanvas extends JComponent {
 		c6 = new Crate(400,200,100,1);
 		c7 = new Crate(100,400,100,1);
 		c8 = new Crate(200,400,100,1);
-		c9 = new Crate(300,400,100,1);
+		c9 = new Crate(0,400,100,1);
 		b1 = new Crate(100,100,100,2);
 		b2 = new Crate(300,100,100,2);
 		b3 = new Crate(100,300,100,2);

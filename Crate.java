@@ -60,11 +60,18 @@ public class Crate implements Object{
         return width;
     }
    
-    public boolean isColliding(Object r) {
-        return !(this.x + this.width <= r.getX() ||
-        this.x >= r.getX() + r.getWidth() ||
-        this.y + this.height <= r.getY() ||
-        this.y >= r.getY() + r.getHeight());
+    public boolean isColliding(Object r, int s) {
+        if (
+            this.x + s + this.width <= r.getX() ||
+            this.x + s >= r.getX() + r.getWidth() ||
+            this.y + s + this.height <= r.getY() ||
+            this.y + s >= r.getY() + r.getHeight()
+        ) {
+            return false;
+        }
+        else {
+            return true;
+        }
         }
 
     public void draw(Graphics2D g){

@@ -15,7 +15,7 @@ public class GameFrame {
 	private JPanel buttonsPanel;
 	private Timer animationTimer;
 	private int speed;
-	private boolean up, down, left, right;
+	private boolean up, down, left, right, free;
 	private int playerID;
 	private Player me,enemy;
 	private ArrayList<Player> players;
@@ -33,6 +33,7 @@ public class GameFrame {
 		Start = new JButton("START");
 		Controls = new JButton("CONTROLS");
 		speed = 3;
+		free = true;
 	}
 	
 	public void setUpGUI() {
@@ -74,6 +75,14 @@ public class GameFrame {
 		// 	me = spicyNuggets;
 		// }	
 	}
+
+	// private void getObjects(){
+	// 	unMoving = gCanvas.getUnmoving();
+	// 	for (Object o : unMoving){
+
+	// 	}
+
+	// }
 	
 	private void setUpKeyListener() {
 		KeyListener kl = new KeyListener() {
@@ -86,9 +95,11 @@ public class GameFrame {
 				switch(keyCode) {
 					case KeyEvent.VK_UP :
 						up = true;
+						// me.moveV(-speed);
 						break;
 					case KeyEvent.VK_DOWN :
 						down = true;
+						// me.moveV(speed);
 						break;
 					case KeyEvent.VK_LEFT :
 						left = true;
@@ -124,32 +135,35 @@ public class GameFrame {
 	}
 
 	private void setUpAnimationTimer() {
-		int interval = 15;
-		unMoving = gCanvas.getUnmoving();
+		int interval = 50;
+		
 		ActionListener al = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ae) {
-				if(up) {
-					me.moveV(-speed);
-					me.spriteChange();
-				} else if(down) {
-					me.moveV(speed);
-					me.spriteChange();
-				} else if(left) {
-					me.moveH(-speed);
-					me.spriteChange();
-				} else if(right) {
-					me.moveH(speed);
-					me.spriteChange();
-				}
-
-					
-				gCanvas.repaint();
+				unMoving = gCanvas.getUnmoving();
+					if(up) {
+						me.moveV(-speed);
+						me.spriteChange();
+					} else if(down) {
+						me.moveV(speed);
+						me.spriteChange();
+					} else if(left) {
+						me.moveH(-speed);
+						me.spriteChange();
+					} else if(right) {
+						me.moveH(speed);
+						me.spriteChange();
+					}	
+					gCanvas.repaint();				
+				 }
+				
+				
 			}
 		};
 		animationTimer = new Timer(interval, al);
 		animationTimer.start();
 	}
-	
+	 //(me.getX() + me.getWidth() <= r.getX() || me.getX() >= r.getX() + r.getWidth() || this.y + this.height <= r.getY() || this.y >= r.getY() + r.getHeight())
 
 // //taken from choobtorials
 // 	private void connectToServer() {

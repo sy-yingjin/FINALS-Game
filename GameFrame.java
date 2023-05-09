@@ -17,9 +17,8 @@ public class GameFrame {
 	private int speed, width, height;
 	private boolean up, down, left, right, free;
 	private int playerID;
-	private Player me,enemy;
-	private ArrayList<Player> players;
-	private ArrayList<Player> unMoving;
+	private Player me, enemy;
+	private ArrayList<Crate> unMoving;
 	
 
 	//for server
@@ -62,15 +61,12 @@ public class GameFrame {
 	//creates players by accessing the player arraylist from GameCanvas
 	//some lines are commented since no networking stuffs yet
 	private void createPlayers(){
-		players = gCanvas.getPlayers();
-		Player chickenNuggets = players.get(0);
-		me = chickenNuggets;
-		//Player spicyNuggets = players.get(1);
+		me = gCanvas.getUser();
+		
 
 		if(playerID == 1){
-			me = chickenNuggets;
-			//enemy = spicyNuggets;
-			
+			me = gCanvas.getUser();
+			enemy = gCanvas.getUser2();
 		}
 		// else{
 		// 	enemy = chickenNuggets;
@@ -133,17 +129,19 @@ public class GameFrame {
 		contentPane.setFocusable(true);
 	}
 	
+	
 	private void setUpAnimationTimer() {
-		int interval = 50;
+		int interval = 30;
+		boolean checkerX = me.BorderCollisionX(speed);
+		boolean checkerY = me.BorderCollisionY(speed);
 		
 		ActionListener al = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				unMoving = gCanvas.getUnmoving();
-				if(up) {
+				if(up && checkerX) {
 					me.moveV(-speed);
 					me.spriteChange();
-				} else if(down) {
+				} else if(down && checkerY) {
 					me.moveV(speed);
 					me.spriteChange();
 				} else if(left) {

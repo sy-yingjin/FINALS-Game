@@ -8,10 +8,13 @@ public class GameCanvas extends JComponent {
 	private int width;
 	private int height;
 	private Player chick, spicy;
-	private ArrayList<Player> players;
+	//game obstacles
 	private Crate c1, c2, c3, c4, c5, c6, c7, c8, c9, b1, b2, b3, b4;
+	// border walls
+	/**private Crate w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14; **/
 	
 	private ArrayList<Object> unMoving;
+	private ArrayList<Object> borders;
 	
 	public GameCanvas(int w, int h) {
 		width = w;
@@ -19,10 +22,7 @@ public class GameCanvas extends JComponent {
 		//making players 
 		chick = new Player(0,0,1);
 		spicy = new Player(400,400,2);
-		//adding players to an arraylist so that they are accessible in the GameFrame class
-		players = new ArrayList<>();
-		players.add(chick);
-		players.add(spicy);
+		
 		//making crates (breakable) and blocks (not breakable)
 		c1 = new Crate(400,0,100,1);
 		c2 = new Crate(200,0,100,1);
@@ -37,6 +37,7 @@ public class GameCanvas extends JComponent {
 		b2 = new Crate(300,100,100,2);
 		b3 = new Crate(100,300,100,2);
 		b4 = new Crate(300,300,100,2);
+		
 		// adding all crate objects into an arraylist
 		unMoving = new ArrayList<>();
 		unMoving.add(c1);
@@ -74,9 +75,14 @@ public class GameCanvas extends JComponent {
 		
 	}
 	
-	//returning arraylist for it to be accessible in GameFrame
-	public ArrayList getPlayers(){
-		return players;
+	//returning playersprites and arraylist for it to be accessible in GameFrame
+	
+	public Player getUser() {
+		return chick;
+	}
+	
+	public Player getUser2() {
+		return spicy;
 	}
 
 	public ArrayList getUnmoving(){

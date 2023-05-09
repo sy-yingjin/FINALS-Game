@@ -15,7 +15,7 @@ public class GameServer {
 	private WriteToClient p1WriteRunnable;
 	private WriteToClient p2WriteRunnable;
 	
-	private double p1x, p1y, p2x, p2y;
+	private int p1x, p1y, p2x, p2y;
 	
 	
 	public GameServer() {
@@ -23,9 +23,9 @@ public class GameServer {
 		numPlayers = 0;
 		maxPlayers = 2;
 		
-		p1x = 100;
-		p1y = 400;
-		p2x = 490;
+		p1x = 0;
+		p1y = 0;
+		p2x = 400;
 		p2y = 400;
 		
 		try {
@@ -94,11 +94,11 @@ public class GameServer {
 			try {
 				while(true) {
 					if(playerID == 1) {
-						p1x = dataIn.readDouble();
-						p1y = dataIn.readDouble();
+						p1x = dataIn.readInt();
+						p1y = dataIn.readInt();
 					} else {
-						p2x = dataIn.readDouble();
-						p2y = dataIn.readDouble();
+						p2x = dataIn.readInt();
+						p2y = dataIn.readInt();
 					}
 				}
 			} catch(IOException ex) {
@@ -121,12 +121,12 @@ public class GameServer {
 			try {
 				while(true) {
 					if(playerID == 1) {
-						dataOut.writeDouble(p2x);
-						dataOut.writeDouble(p2y);
+						dataOut.writeInt(p2x);
+						dataOut.writeInt(p2y);
 						dataOut.flush();
 					} else {
-						dataOut.writeDouble(p1x);
-						dataOut.writeDouble(p1y);
+						dataOut.writeInt(p1x);
+						dataOut.writeInt(p1y);
 						dataOut.flush();
 					}
 					try {
@@ -147,6 +147,11 @@ public class GameServer {
 				System.out.println("IOException from WTC run()");
 			}
 		}
+	}
+
+	public static void main(String[] args) {
+		GameServer gs = new GameServer();
+		gs.acceptConnection();
 	}
 
 }

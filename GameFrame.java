@@ -15,16 +15,15 @@ public class GameFrame {
 	private JPanel buttonsPanel;
 	private Timer animationTimer;
 	private int speed, width, height;
-	private boolean up, down, left, right, free;
-	private int playerID;
+	private boolean up, down, left, right;
 	private Player me, enemy;
 	private ArrayList<Crate> unMoving;
-	
+	private int playerID;
 
 	//for server
-	// private Socket socket;
-	// private ReadFromServer rfsRunnable;
-	// private WriteToServer wtsRunnable;
+	private Socket socket;
+	private ReadFromServer rfsRunnable;
+	private WriteToServer wtsRunnable;
 
 	public GameFrame(int w, int h) {
 		width = w;
@@ -34,7 +33,6 @@ public class GameFrame {
 		Start = new JButton("START");
 		Controls = new JButton("CONTROLS");
 		speed = 25;
-		free = true;
 	}
 	
 	public void setUpGUI() {
@@ -43,17 +41,18 @@ public class GameFrame {
 		createPlayers();
 
 		/*Setting up the actual GUI was pretty fun when you know what you can mess with without messing up the program*/
-		buttonsPanel.setLayout(new GridLayout(1,2));
+		/** buttonsPanel.setLayout(new GridLayout(1,2));
 		buttonsPanel.add(Start);
 		buttonsPanel.add(Controls);
 	
-		contentPane.add(buttonsPanel, BorderLayout.SOUTH);
+		contentPane.add(buttonsPanel, BorderLayout.SOUTH); **/
 		contentPane.add(gCanvas, BorderLayout.CENTER);
 		
 		frame.setTitle("Bomb-A Man");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);	
+		
 		setUpAnimationTimer();	
 		setUpKeyListener();
 	}
@@ -61,26 +60,14 @@ public class GameFrame {
 	//creates players by accessing the player arraylist from GameCanvas
 	//some lines are commented since no networking stuffs yet
 	private void createPlayers(){
-		me = gCanvas.getUser();
-		
-
 		if(playerID == 1){
 			me = gCanvas.getUser();
 			enemy = gCanvas.getUser2();
-		}
-		// else{
-		// 	enemy = chickenNuggets;
-		// 	me = spicyNuggets;
-		// }	
+		} else{
+			enemy = gCanvas.getUser();
+			me = gCanvas.getUser2();
+		}	
 	}
-
-	// private void getObjects(){
-	// 	unMoving = gCanvas.getUnmoving();
-	// 	for (Object o : unMoving){
-
-	// 	}
-
-	// }
 	
 	private void setUpKeyListener() {
 		KeyListener kl = new KeyListener() {
@@ -132,16 +119,14 @@ public class GameFrame {
 	
 	private void setUpAnimationTimer() {
 		int interval = 30;
-		boolean checkerX = me.BorderCollisionX(speed);
-		boolean checkerY = me.BorderCollisionY(speed);
 		
 		ActionListener al = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				if(up && checkerX) {
+				if(up) {
 					me.moveV(-speed);
 					me.spriteChange();
-				} else if(down && checkerY) {
+				} else if(down) {
 					me.moveV(speed);
 					me.spriteChange();
 				} else if(left) {
@@ -151,6 +136,21 @@ public class GameFrame {
 					me.moveH(speed);
 					me.spriteChange();
 				}
+				
+				//border collision to the edge of the frame
+				if (me.getX() + me.getWidth() > width) { //if player is too right
+					me.moveH(-speed);
+					me.spriteChange();
+				} else if (me.getX() < 0) { //if player too left
+					me.moveH(speed);
+					me.spriteChange();
+				} else if (me.getY() + me.getHeight() > height) { //if player too down
+					me.moveV(-speed);
+					me.spriteChange();
+				} else if (me.getY() < 0) { // if player too up
+					me.moveV(speed);
+					me.spriteChange();
+				}
 				gCanvas.repaint();				
 			}
 		};
@@ -158,89 +158,89 @@ public class GameFrame {
 		animationTimer.start();
 	}
 
-// //taken from choobtorials
-// 	private void connectToServer() {
-// 		try {
-// 			socket = new Socket("localhost", 51234);
-// 			DataInputStream in = new DataInputStream(socket.getInputStream());
-// 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+	//taken from choobtorials
+	public void connectToServer() {
+		try {
+ 			socket = new Socket("localhost", 51234);
+ 			DataInputStream in = new DataInputStream(socket.getInputStream());
+ 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			
-// 			playerID = in.readInt();
-// 			System.out.println("You are player #" + playerID);
-// 			if(playerID == 1) {
-// 				System.out.println("Waiting for Player #2 to connect. . .");
-// 			}
-// 			rfsRunnable = new ReadFromServer(in);
-// 			wtsRunnable = new WriteToServer(out);
-// 			rfsRunnable.waitForStartMsg();
-// 		} catch(IOException ex) {
-// 			System.out.println("IOException from connectToServer()");
-// 		}
-// 	}
+ 			playerID = in.readInt();
+ 			System.out.println("You are player #" + playerID);
+ 			if(playerID == 1) {
+ 				System.out.println("Waiting for Player #2 to connect. . .");
+		}
+ 			rfsRunnable = new ReadFromServer(in);
+ 			wtsRunnable = new WriteToServer(out);
+ 			rfsRunnable.waitForStartMsg();
+ 		} catch(IOException ex) {
+ 			System.out.println("IOException from connectToServer()");
+ 		}
+ 	}
 	
-// 	private class ReadFromServer implements Runnable {
-// 		private DataInputStream dataIn;
+ 	private class ReadFromServer implements Runnable {
+		private DataInputStream dataIn;
 		
-// 		public ReadFromServer(DataInputStream in) {
-// 			dataIn = in;
-// 			System.out.println("RFS Runnable created");
-// 		}
+		public ReadFromServer(DataInputStream in) {
+			dataIn = in;
+			System.out.println("RFS Runnable created");
+		}
 		
-// 		public void run() {
-// 			try {
-// 				while(true) {
-// 					double enemyX = dataIn.readDouble();
-// 					double enemyY = dataIn.readDouble();
-// 					if (enemy != null) {
-// 						enemy.setX(enemyX);
-// 						enemy.setY(enemyY);
-// 					}
-// 				}
-// 			} catch(IOException ex) {
-// 				System.out.println("IOException from RFS run()");
-// 			}
-// 		}
+		public void run() {
+			try {
+				while(true) {
+					int enemyX = dataIn.readInt();
+					int enemyY = dataIn.readInt();
+ 					if (enemy != null) {
+						enemy.setX(enemyX);
+						enemy.setY(enemyY);
+					}
+				}
+			} catch(IOException ex) {
+				System.out.println("IOException from RFS run()");
+			}
+		}
 		
-// 		public void waitForStartMsg() {
-// 			try {
-// 				String startMsg = dataIn.readUTF();
-// 				System.out.println("Message from server: " + startMsg);
-// 				Thread readThread = new Thread(rfsRunnable);
-// 				Thread writeThread = new Thread(wtsRunnable);
-// 				readThread.start();
-// 				writeThread.start();
-// 			} catch(IOException ex) {
-// 				System.out.println("IOException from waitForStartMsg()");
-// 			}
-// 		}
-// 	}
+		public void waitForStartMsg() {
+			try {
+				String startMsg = dataIn.readUTF();
+				System.out.println("Message from server: " + startMsg);
+				Thread readThread = new Thread(rfsRunnable);
+				Thread writeThread = new Thread(wtsRunnable);
+				readThread.start();
+				writeThread.start();
+			} catch(IOException ex) {
+				System.out.println("IOException from waitForStartMsg()");
+			}
+		}
+	}
 	
-// 	private class WriteToServer implements Runnable {
-// 		private DataOutputStream dataOut;
+	private class WriteToServer implements Runnable {
+		private DataOutputStream dataOut;
 		
-// 		public WriteToServer(DataOutputStream out) {
-// 			dataOut = out;
-// 			System.out.println("WTS Runnable created");
-// 		}
+		public WriteToServer(DataOutputStream out) {
+			dataOut = out;
+			System.out.println("WTS Runnable created");
+		}
 		
-// 		public void run() {
-// 			try {
-// 				while(true) {
-// 					if (me != null)  {
-// 						dataOut.writeDouble(me.getX());
-// 						dataOut.writeDouble(me.getY());
-// 						dataOut.flush();
-// 					}
+		public void run() {
+			try {
+				while(true) {
+					if (me != null)  {
+						dataOut.writeDouble(me.getX());
+						dataOut.writeDouble(me.getY());
+						dataOut.flush();
+					}
 					
-// 					try {
-// 						Thread.sleep(25);
-// 					} catch(InterruptedException ex) {
-// 						System.out.println("InterruptedException from WTS run()");
-// 					}
-// 				}
-// 			} catch(IOException ex) {
-// 				System.out.println("IOException from WTS run()");
-// 			}
-// 		}
-// 	}
+					try {
+						Thread.sleep(25);
+					} catch(InterruptedException ex) {
+						System.out.println("InterruptedException from WTS run()");
+					}
+				}
+			} catch(IOException ex) {
+				System.out.println("IOException from WTS run()");
+			}
+		}
+	}
 }

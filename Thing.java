@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public interface Object {
+public interface Thing {
 
 	void draw(Graphics2D g);
 	int getX();

@@ -15,10 +15,11 @@ public class GameFrame {
 	private JPanel buttonsPanel;
 	private Timer animationTimer;
 	private int speed, width, height;
-	private boolean up, down, left, right;
+	private boolean up, down, left, right, space;
 	private Player me, enemy;
 	private ArrayList<Crate> unMoving;
 	private int playerID;
+	private Bomb bomb;
 
 	//for server
 	private Socket socket;
@@ -90,6 +91,10 @@ public class GameFrame {
 					case KeyEvent.VK_RIGHT :
 						right = true;
 						break;
+					case KeyEvent.VK_SPACE :
+						space = true;
+						break;
+					
 				}
 			}
 			
@@ -109,6 +114,9 @@ public class GameFrame {
 					case KeyEvent.VK_RIGHT :
 						right = false;
 						break;
+					case KeyEvent.VK_SPACE :
+						space = false;
+						break;
 				}
 			}
 		};
@@ -118,7 +126,7 @@ public class GameFrame {
 	
 	
 	private void setUpAnimationTimer() {
-		int interval = 30;
+		int interval = 300;
 		
 		ActionListener al = new ActionListener() {
 			@Override
@@ -126,32 +134,57 @@ public class GameFrame {
 				if(up) {
 					me.moveV(-speed);
 					me.spriteChange();
+					gCanvas.repaint();	
 				} else if(down) {
 					me.moveV(speed);
 					me.spriteChange();
+					gCanvas.repaint();	
 				} else if(left) {
 					me.moveH(-speed);
 					me.spriteChange();
+					gCanvas.repaint();	
 				} else if(right) {
 					me.moveH(speed);
 					me.spriteChange();
+					gCanvas.repaint();	
+				} else if(space) { //create a bomb
+					Bomb bomb = gCanvas.newBomb(me.getX(), me.getY());
+				//	for(int i=0; i<=6; i++){
+						
+						
+						bomb.bombTime(1);
+						gCanvas.repaint();	
+						try{
+							Thread.sleep(500);
+						} catch(Exception e){
+							e.printStackTrace();
+						}
+						bomb.bombTime(2);
+						gCanvas.repaint();	
+						
+				//	}
+					
+					System.out.println("boom");
 				}
-				
 				//border collision to the edge of the frame
 				if (me.getX() + me.getWidth() > width) { //if player is too right
 					me.moveH(-speed);
 					me.spriteChange();
+					gCanvas.repaint();	
 				} else if (me.getX() < 0) { //if player too left
 					me.moveH(speed);
 					me.spriteChange();
+					gCanvas.repaint();	
 				} else if (me.getY() + me.getHeight() > height) { //if player too down
 					me.moveV(-speed);
 					me.spriteChange();
+					gCanvas.repaint();	
 				} else if (me.getY() < 0) { // if player too up
 					me.moveV(speed);
 					me.spriteChange();
+					gCanvas.repaint();	
 				}
-				gCanvas.repaint();				
+							
 			}
 		};
 		animationTimer = new Timer(interval, al);

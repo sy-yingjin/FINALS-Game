@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 
-public class Crate implements Object{
+public class Crate implements Thing{
     private int x, y, width, height, type;
     public BufferedImage crate, block, speedDrop, powerDrop, rangeDrop;
     public BufferedImage image = null; 
@@ -60,7 +60,7 @@ public class Crate implements Object{
         return width;
     }
 
-    public boolean isCollidingX(Object r, int s) {
+    public boolean isCollidingX(Thing r, int s) {
         if (
             this.x + s + this.width <= r.getX() || // left side
             this.x + s >= r.getX() + r.getWidth() // right side
@@ -72,7 +72,7 @@ public class Crate implements Object{
         }
     }
 	
-	public boolean isCollidingY(Object r, int s) {
+	public boolean isCollidingY(Thing r, int s) {
         if (
             this.y + s + this.height <= r.getY() || // top side
             this.y + s >= r.getY() + r.getHeight() // bottom side

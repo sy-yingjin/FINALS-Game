@@ -94,7 +94,6 @@ public class GameFrame {
 					case KeyEvent.VK_SPACE :
 						space = true;
 						break;
-					
 				}
 			}
 			
@@ -126,7 +125,7 @@ public class GameFrame {
 	
 	
 	private void setUpAnimationTimer() {
-		int interval = 300;
+		int interval = 30;
 		
 		ActionListener al = new ActionListener() {
 			@Override
@@ -134,7 +133,7 @@ public class GameFrame {
 				if(up) {
 					me.moveV(-speed);
 					me.spriteChange();
-					gCanvas.repaint();	
+					gCanvas.repaint();
 				} else if(down) {
 					me.moveV(speed);
 					me.spriteChange();
@@ -142,11 +141,12 @@ public class GameFrame {
 				} else if(left) {
 					me.moveH(-speed);
 					me.spriteChange();
-					gCanvas.repaint();	
+					gCanvas.repaint();
 				} else if(right) {
 					me.moveH(speed);
 					me.spriteChange();
-					gCanvas.repaint();	
+					gCanvas.repaint();
+					
 				} else if(space) { //create a bomb
 					Bomb bomb = gCanvas.newBomb(me.getX(), me.getY());
 				//	for(int i=0; i<=6; i++){
@@ -166,6 +166,7 @@ public class GameFrame {
 					
 					System.out.println("boom");
 				}
+				
 				//border collision to the edge of the frame
 				if (me.getX() + me.getWidth() > width) { //if player is too right
 					me.moveH(-speed);
@@ -184,7 +185,36 @@ public class GameFrame {
 					me.spriteChange();
 					gCanvas.repaint();	
 				}
-							
+				unMoving = gCanvas.getUnmoving();
+				// Goes through ArrayList of Collideable
+				for ( Thing o : unMoving ) {
+					// checks for collision
+					// won't go through this if False
+					// will bug out if u press keys at the same time
+					if ( me.isColliding(o) ) {
+						if ( right ) {
+							// collision on left
+							me.moveH(-speed);
+							me.spriteChange();
+							gCanvas.repaint();
+						} else if ( left ) {
+							// collision on right
+							me.moveH(speed);
+							me.spriteChange();
+							gCanvas.repaint();
+						} else if ( down ) {
+							// collision on up
+							me.moveV(-speed);
+							me.spriteChange();
+							gCanvas.repaint();
+						} else if ( up ) {
+							// collision on down
+							me.moveV(speed);
+							me.spriteChange();
+							gCanvas.repaint();
+						}
+					}
+				}	
 			}
 		};
 		animationTimer = new Timer(interval, al);

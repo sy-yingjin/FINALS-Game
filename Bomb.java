@@ -4,12 +4,14 @@ import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.event.*;
 
 public class Bomb implements Thing{
     private int x, y, width, height, range, bombFrame, frame;
     public BufferedImage bomb1, bomb2, explode1, explode2;
     public BufferedImage image = null;
     private boolean explosion;
+    private Timer timer;
 
     public Bomb(int x, int y){
         this.x = x;
@@ -60,30 +62,40 @@ public class Bomb implements Thing{
     }
 
     public void bombTime(int i){
-        if(i == 1){
-            frame = 1;
-            System.out.println("1");
+        Timer timer = new Timer(10000, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                int i = 0;
+                while(i <=4){
+                    if(i == 1){
+                        frame = 1;
+                        System.out.println("1");
+                        }
+                    else if(i == 2){
+                        frame = 2;
+                        System.out.println("2");
+                        }      
+                    else if(i == 3){
+                        frame = 3;
+                        System.out.println("3");
+                    }
+                    else if(i == 4){
+                        frame = 4;
+                        System.out.println("4");
+                    }
+                    i++;
+                }
             }
-        else if(i == 2){
-            frame = 2;
-            System.out.println("2");
-            }      
-        else if(i == 3){
-            frame = 3;
-            System.out.println("3");
-        }
-        else if(i == 4){
-            frame = 4;
-            System.out.println("4");
-        }
+        });	
+        // 
+        timer.setInitialDelay(300);
+        timer.start(); 
+        
         // else if(i ==5){
         //     frame = 5;
         //     System.out.println("5");
         // }
-        // else if(i == 6){
-        //     frame = 6;
-            
-        // }
+
     }
 
     public boolean explodeCheck(){
@@ -206,10 +218,11 @@ public class Bomb implements Thing{
             case 4:
             image = explode2;
             break;
-            // case 6:
-            // image = null;
-            // break;
+            case 5:
+            image = null;
+            break;
           }
+
 
         g.drawImage(image,x,y,width,height,null);
 

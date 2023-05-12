@@ -79,16 +79,16 @@ public class GameFrame {
 				int keyCode = ke.getKeyCode();
 				
 				switch(keyCode) {
-					case KeyEvent.VK_UP :
+					case KeyEvent.VK_W :
 						up = true;
 						break;
-					case KeyEvent.VK_DOWN :
+					case KeyEvent.VK_S :
 						down = true;
 						break;
-					case KeyEvent.VK_LEFT :
+					case KeyEvent.VK_A :
 						left = true;
 						break;
-					case KeyEvent.VK_RIGHT :
+					case KeyEvent.VK_D :
 						right = true;
 						break;
 					case KeyEvent.VK_SPACE :
@@ -101,16 +101,16 @@ public class GameFrame {
 				int keyCode = ke.getKeyCode();
 				
 				switch(keyCode) {
-					case KeyEvent.VK_UP :
+					case KeyEvent.VK_W :
 						up = false;
 						break;
-					case KeyEvent.VK_DOWN :
+					case KeyEvent.VK_S :
 						down = false;
 						break;
-					case KeyEvent.VK_LEFT :
+					case KeyEvent.VK_A :
 						left = false;
 						break;
-					case KeyEvent.VK_RIGHT :
+					case KeyEvent.VK_D :
 						right = false;
 						break;
 					case KeyEvent.VK_SPACE :
@@ -130,19 +130,19 @@ public class GameFrame {
 		ActionListener al = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				if(up) {
+				if(up && !down && !left && !right) {
 					me.moveV(-speed);
 					me.spriteChange();
 					gCanvas.repaint();
-				} else if(down) {
+				} else if(down && !up && !left && !right) {
 					me.moveV(speed);
 					me.spriteChange();
 					gCanvas.repaint();	
-				} else if(left) {
+				} else if(left && !up && !down && !right) {
 					me.moveH(-speed);
 					me.spriteChange();
 					gCanvas.repaint();
-				} else if(right) {
+				} else if(right && !up && !down && !left) {
 					me.moveH(speed);
 					me.spriteChange();
 					gCanvas.repaint();
@@ -150,19 +150,39 @@ public class GameFrame {
 				} else if(space) { //create a bomb
 					Bomb bomb = gCanvas.newBomb(me.getX(), me.getY());
 				//	for(int i=0; i<=6; i++){
+						 //bomb.bombTime(1);
+						 
+						// gCanvas.repaint();	
+						// // gCanvas.repaint();	
+						// // try{
+						// // 	Thread.sleep(3000);
+						// // } catch(Exception e){
+						// // 	e.printStackTrace();
+						// // }
+						//  bomb.bombTime(2);
+						// // gCanvas.repaint();
+						// Timer time1 = new Timer(1000, new ActionListener(){
+						// 	@Override
+						// 	public void actionPerformed(ActionEvent e){
+						// 		// for (int i=1; i<=6; i++){
+						// 		// 	bomb.bombTime(i);
+						// 			gCanvas.repaint();
+						// 		// }
+						// 	}
+						// });	
+							bomb.bombTime(1);
+							gCanvas.repaint();
+							
 						
 						
-						bomb.bombTime(1);
-						gCanvas.repaint();	
-						try{
-							Thread.sleep(500);
-						} catch(Exception e){
-							e.printStackTrace();
-						}
-						bomb.bombTime(2);
-						gCanvas.repaint();	
+						// 	
 						
-				//	}
+						
+						
+						
+						
+						
+					//}
 					
 					System.out.println("boom");
 				}

@@ -15,7 +15,7 @@ public class GameFrame {
 	private JPanel buttonsPanel;
 	private Timer animationTimer;
 	private int speed, width, height;
-	private boolean up, down, left, right, space, max;
+	private boolean up, down, left, right, space, max, bombCounter;
 	private Player me, enemy;
 	private ArrayList<Crate> unMoving;
 	private ArrayList<Bomb> bombs;
@@ -153,50 +153,61 @@ public class GameFrame {
 					me.spriteChange();
 					gCanvas.repaint();
 					
-				} else if(space) { //create a bomb
+				} else if(space && bombCounter == false) { //create a bomb
 					
 					// for(Bomb b : bombs){
 
 					// }
 					myBomb.setX(me.getX());
 					myBomb.setY(me.getY());
-					timer = new Timer(200, new ActionListener(){
-						@Override
-						public void actionPerformed(ActionEvent e){
-							int check = myBomb.checkCounter();
-							if (check <= 20) {
-								myBomb.setFrame(1);
-								myBomb.addCounter();
-								gCanvas.repaint();
-							} else if (check > 20 && check <= 40) {
-								myBomb.setFrame(2);
-								myBomb.addCounter();
-								gCanvas.repaint();
-							} else if (check > 40 && check <= 50) {
-								myBomb.setFrame(3);
-								myBomb.addCounter();
-								gCanvas.repaint();
-							} else if (check > 50 && check <= 80) {
-								myBomb.setFrame(4);
-								myBomb.addCounter();
-								gCanvas.repaint();
-							} else if (check > 80) {
-								myBomb.setFrame(5);
-								max = true;
+					boolean bombSet = true;
+					bombCounter = true;
+					while(bombSet){
+						timer = new Timer(80, new ActionListener(){
+							@Override
+							public void actionPerformed(ActionEvent e){
+								int check = myBomb.checkCounter();
+								if (check <= 20) {
+									myBomb.setFrame(1);
+									myBomb.addCounter();
+									gCanvas.repaint();
+								} else if (check > 20 && check <= 40) {
+									myBomb.setFrame(2);
+									myBomb.addCounter();
+									gCanvas.repaint();
+								} else if (check > 40 && check <= 50) {
+									myBomb.setFrame(3);
+									myBomb.addCounter();
+									gCanvas.repaint();
+								} else if (check > 50 && check <= 80) {
+									myBomb.setFrame(4);
+									myBomb.addCounter();
+									gCanvas.repaint();
+								} else if (check > 80) {
+									myBomb.setFrame(5);
+									gCanvas.repaint();
+									max = true;
+								}
+	
+								if (max){
+									timer.stop();
+									timer.setRepeats(false);
+									System.out.println("stop!");						
+									myBomb.resetCounter();
+									max = false;
+									bombCounter = false;
+								}
+								
 							}
-
-							if (max){
-								timer.stop();
-								System.out.println("stop!");						
-								myBomb.resetCounter();
-								max = false;
-							}
-							
-						}
-					});	
+						});	
+						timer.start(); 
+						bombSet = false;
+						
+					}
+					
 							// 
 							//timer.setInitialDelay(30);
-					timer.start(); 
+					
 					
 							//timer.setRepeats(false);
 				

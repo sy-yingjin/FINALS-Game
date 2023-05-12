@@ -6,12 +6,11 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public class Bomb implements Thing{
-    private int x, y, width, height, range, bombFrame, frame;
+    private int x, y, width, height, frame;
 	private int counter;
-    public BufferedImage bomb1, bomb2, explode1, explode2, blank;
+    public BufferedImage bomb1, bomb2, explode1, explode2;
     public BufferedImage image = null;
-    private boolean explosion;
-    private Timer timer;
+
 
     public Bomb(int x, int y){
         this.x = x;
@@ -19,8 +18,6 @@ public class Bomb implements Thing{
         width = 100;
         height = 100;
         bombImage();
-        range = 1;
-        bombFrame = 0;
         frame = 0;
 		counter = 0;
 
@@ -32,7 +29,7 @@ public class Bomb implements Thing{
             bomb2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/bomb 2.png"));
             explode1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/explode 1.png"));
             explode2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/explode 2.png"));
-            blank = ImageIO.read(getClass().getResourceAsStream("/Sprites/blank.png"));
+            //blank = ImageIO.read(getClass().getResourceAsStream("/Sprites/blank.png"));
 
         }catch(IOException e){
             e.printStackTrace();
@@ -119,12 +116,13 @@ public class Bomb implements Thing{
 
     }
 
-    public boolean explodeCheck(){
-        if(frame == 5){
-            explosion = true;
-        }
-        return explosion;
-    }
+    // public boolean explodeCheck(){
+    //     if(frame == 4){
+    //         explosion = true;
+    //     }
+    //     return explosion;
+    // }
+
 
     // public void bombTime(){
     //    while(bombFrame <= 35){
@@ -241,7 +239,7 @@ public class Bomb implements Thing{
             image = explode2;
             break;
             case 5:
-            image = blank;
+            image = null;
             break;
           }
 

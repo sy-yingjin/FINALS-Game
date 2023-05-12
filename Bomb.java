@@ -4,7 +4,6 @@ import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
-import java.awt.event.*;
 
 public class Bomb implements Thing{
     private int x, y, width, height, range, bombFrame, frame;
@@ -62,35 +61,23 @@ public class Bomb implements Thing{
     }
 
     public void bombTime(int i){
-        Timer timer = new Timer(10000, new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                int i = 0;
-                while(i <=4){
-                    if(i == 1){
-                        frame = 1;
-                        System.out.println("1");
-                        }
-                    else if(i == 2){
-                        frame = 2;
-                        System.out.println("2");
-                        }      
-                    else if(i == 3){
-                        frame = 3;
-                        System.out.println("3");
-                    }
-                    else if(i == 4){
-                        frame = 4;
-                        System.out.println("4");
-                    }
-                    i++;
-                }
-            }
-        });	
-        // 
-        timer.setInitialDelay(300);
-        timer.start(); 
         
+        if(i == 1){
+            frame = 1;
+            System.out.println("1");
+            }
+        else if(i == 2){
+            frame = 2;
+            System.out.println("2");
+            }      
+        else if(i == 3){
+            frame = 3;
+            System.out.println("3");
+        }
+        else if(i == 4){
+            frame = 4;
+            System.out.println("4");
+        }
         // else if(i ==5){
         //     frame = 5;
         //     System.out.println("5");

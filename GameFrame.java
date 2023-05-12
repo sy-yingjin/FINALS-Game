@@ -172,7 +172,18 @@ public class GameFrame {
 						// });	
 							bomb.bombTime(1);
 							gCanvas.repaint();
-							
+							Timer timer = new Timer(1000, new ActionListener(){
+								@Override
+								public void actionPerformed(ActionEvent e){
+									//for (int i=1; i<=6; i++){
+										//
+										gCanvas.repaint();
+									// }
+								}
+							});	
+							// 
+							timer.setInitialDelay(300);
+							timer.start(); 
 						
 						
 						// 	

@@ -7,7 +7,7 @@ import java.awt.geom.*;
 
 public class Crate implements Thing{
     private int x, y, width, height, type;
-    public BufferedImage crate, block, speedDrop, powerDrop, rangeDrop;
+    public BufferedImage crate, block, speedDrop, powerDrop, rangeDrop, destroy;
     public BufferedImage image = null; 
     public boolean bombed; //not yet sure how to code this...
 
@@ -28,6 +28,7 @@ public class Crate implements Thing{
             speedDrop = ImageIO.read(getClass().getResourceAsStream("/Sprites/add speed.png"));
             powerDrop = ImageIO.read(getClass().getResourceAsStream("/Sprites/add power.png"));
             rangeDrop = ImageIO.read(getClass().getResourceAsStream("/Sprites/add range.png"));
+            destroy = ImageIO.read(getClass().getResourceAsStream("/Sprites/broke.png"));
 
         }catch(IOException e){
             e.printStackTrace();

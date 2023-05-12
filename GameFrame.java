@@ -15,7 +15,7 @@ public class GameFrame {
 	private JPanel buttonsPanel;
 	private Timer animationTimer;
 	private int speed, width, height;
-	private boolean up, down, left, right, space;
+	private boolean up, down, left, right, space, max;
 	private Player me, enemy;
 	private ArrayList<Crate> unMoving;
 	private int playerID;
@@ -173,10 +173,11 @@ public class GameFrame {
 							//bomb.bombTime(1);
 							//gCanvas.repaint();
 					Timer timer = new Timer(180, new ActionListener(){
+						
 						@Override
 						public void actionPerformed(ActionEvent e){
 							int check = bomb.checkCounter();
-							boolean max = false;
+							
 							
 							if (check <= 20) {
 								bomb.setFrame(1);
@@ -195,16 +196,22 @@ public class GameFrame {
 								bomb.addCounter();
 								gCanvas.repaint();
 							} else if (check > 80) {
-								bomb.resetCounter();
+								bomb.setFrame(5);
 								max = true;
 							}
+
 							
 						}
 					});	
 							// 
 							//timer.setInitialDelay(30);
-							timer.start(); 
-							timer.setRepeats(false);
+					timer.start(); 
+					if (max){
+						timer.stop();
+						bomb.resetCounter();
+						max = false;
+					}
+							//timer.setRepeats(false);
 				
 						
 					//}

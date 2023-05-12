@@ -7,6 +7,7 @@ import java.awt.geom.*;
 
 public class Bomb implements Thing{
     private int x, y, width, height, range, bombFrame, frame;
+	private int counter;
     public BufferedImage bomb1, bomb2, explode1, explode2;
     public BufferedImage image = null;
     private boolean explosion;
@@ -21,6 +22,7 @@ public class Bomb implements Thing{
         range = 1;
         bombFrame = 0;
         frame = 0;
+		counter = 0;
 
     }
 
@@ -59,29 +61,60 @@ public class Bomb implements Thing{
     public int getWidth(){
         return width;
     }
+	
+	public void setFrame(int i) {
+		frame = i;
+	}
+	
+	public void addCounter() {
+		counter+= 2;
+	}
+	
+	public int checkCounter() {
+		return counter;
+	}
+	
+	public void resetCounter() {
+		counter = 0;
+	}
 
-    public void bombTime(int i){
-        
-        if(i == 1){
+    public void bombTime(){
+		/**
+		timer = new Timer(300,this);
+		timer.setInitialDelay(30);
+		timer.start();
+		
+        frame = 1;
+		System.out.println("1");
+		
+		frame = 2;
+		System.out.println("2");
+		frame = 3;
+		System.out.println("3");
+		frame = 4;
+		
+		
+        if(i == 1){ //2
             frame = 1;
             System.out.println("1");
-            }
-        else if(i == 2){
+			for (int j = 0; j) {
+			}
+        } else if(i == 2){ //2
             frame = 2;
             System.out.println("2");
             }      
-        else if(i == 3){
+        else if(i == 3){ //1
             frame = 3;
             System.out.println("3");
         }
-        else if(i == 4){
+        else if(i == 4){ //3
             frame = 4;
             System.out.println("4");
         }
         // else if(i ==5){
-        //     frame = 5;
+        //     frame = null;
         //     System.out.println("5");
-        // }
+        // }**/
 
     }
 

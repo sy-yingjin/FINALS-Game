@@ -170,28 +170,42 @@ public class GameFrame {
 						// 		// }
 						// 	}
 						// });	
-							bomb.bombTime(1);
-							gCanvas.repaint();
-							Timer timer = new Timer(1000, new ActionListener(){
-								@Override
-								public void actionPerformed(ActionEvent e){
-									//for (int i=1; i<=6; i++){
-										//
-										gCanvas.repaint();
-									// }
-								}
-							});	
+							//bomb.bombTime(1);
+							//gCanvas.repaint();
+					Timer timer = new Timer(180, new ActionListener(){
+						@Override
+						public void actionPerformed(ActionEvent e){
+							int check = bomb.checkCounter();
+							boolean max = false;
+							
+							if (check <= 20) {
+								bomb.setFrame(1);
+								bomb.addCounter();
+								gCanvas.repaint();
+							} else if (check > 20 && check <= 40) {
+								bomb.setFrame(2);
+								bomb.addCounter();
+								gCanvas.repaint();
+							} else if (check > 40 && check <= 50) {
+								bomb.setFrame(3);
+								bomb.addCounter();
+								gCanvas.repaint();
+							} else if (check > 50 && check <= 80) {
+								bomb.setFrame(4);
+								bomb.addCounter();
+								gCanvas.repaint();
+							} else if (check > 80) {
+								bomb.resetCounter();
+								max = true;
+							}
+							
+						}
+					});	
 							// 
-							timer.setInitialDelay(300);
+							//timer.setInitialDelay(30);
 							timer.start(); 
-						
-						
-						// 	
-						
-						
-						
-						
-						
+							timer.setRepeats(false);
+				
 						
 					//}
 					

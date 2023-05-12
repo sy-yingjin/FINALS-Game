@@ -85,21 +85,6 @@ public class Player implements Thing{
         }
 
     }
-    // public getHP(){
-    //     return HP;
-    // }
-
-    // public void dies(){
-    //     //how do we make an object disappear but retain its records
-    // }
-	
-	/**public boolean BorderCollisionX(int s) {
-		return (this.x + s + this.width <= 500 || this.x - s >= 0);
-	}
-	
-	public boolean BorderCollisionY(int s) {
-		return (this.y + s + this.height <= 500 || this.y - s >= 0);
-	} **/
 	
     public boolean isColliding(Thing r) {
 		

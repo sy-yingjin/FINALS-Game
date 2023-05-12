@@ -19,7 +19,6 @@ public class Crate implements Thing{
         this.type = type;
         // 1 = empty, 2 = wall, 3 = speed drop, 4 = power drop, 5 = range drop
         crateImage();
-
     }
 
     public void crateImage(){
@@ -74,7 +73,6 @@ public class Crate implements Thing{
     }
 
     public void draw(Graphics2D g){
-        
         switch(type){
             case 1:
                 image = crate;
@@ -82,11 +80,10 @@ public class Crate implements Thing{
             case 2:
                 image = block;
                 break;
+			case 3:
+				image = null;
+				break;
             }
-            
-        // if(bombed){
-            
-        // }
         g.drawImage(image,x,y,width,height,null);
 
     }

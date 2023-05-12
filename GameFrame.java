@@ -155,9 +155,6 @@ public class GameFrame {
 					
 				} else if(space && bombCounter == false) { //create a bomb
 					
-					// for(Bomb b : bombs){
-
-					// }
 					myBomb.setX(me.getX());
 					myBomb.setY(me.getY());
 					boolean bombSet = true;
@@ -204,16 +201,6 @@ public class GameFrame {
 						bombSet = false;
 						
 					}
-					
-							// 
-							//timer.setInitialDelay(30);
-					
-					
-							//timer.setRepeats(false);
-				
-						
-					//}
-					
 					System.out.println("boom");
 				}
 				
@@ -235,6 +222,7 @@ public class GameFrame {
 					me.spriteChange();
 					gCanvas.repaint();	
 				}
+				
 				unMoving = gCanvas.getUnmoving();
 				// Goes through ArrayList of Collideable
 				for ( Thing o : unMoving ) {

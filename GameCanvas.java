@@ -11,8 +11,6 @@ public class GameCanvas extends JComponent {
 	//game obstacles
 	private Crate c1, c2, c3, c4, c5, c6, c7, c8, c9, b1, b2, b3, b4;
 	private Bomb bomb1, bomb2;
-	// border walls
-	/**private Crate w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14; **/
 	
 	private ArrayList<Thing> unMoving;
 	private ArrayList<Thing> bombs;
@@ -68,7 +66,6 @@ public class GameCanvas extends JComponent {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		
 		Graphics2D g2d = (Graphics2D) g;
 		
 		Rectangle2D.Double background = new Rectangle2D.Double(0,0,width,height);
@@ -84,7 +81,6 @@ public class GameCanvas extends JComponent {
 		for (Thing o : unMoving){
 			o.draw(g2d);
 		}
-		
 	}
 	
 	//returning playersprites and arraylist for it to be accessible in GameFrame
@@ -112,7 +108,4 @@ public class GameCanvas extends JComponent {
 	public ArrayList getBombs(){
 		return bombs;
 	}
-
-
-	
 }

@@ -10,12 +10,12 @@ public class GameCanvas extends JComponent {
 	private Player chick, spicy;
 	//game obstacles
 	private Crate c1, c2, c3, c4, c5, c6, c7, c8, c9, b1, b2, b3, b4;
-	private Bomb bomb;
+	private Bomb bomb1, bomb2;
 	// border walls
 	/**private Crate w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14; **/
 	
 	private ArrayList<Thing> unMoving;
-	private ArrayList<Thing> borders;
+	private ArrayList<Thing> bombs;
 	
 	public GameCanvas(int w, int h) {
 		width = w;
@@ -38,7 +38,13 @@ public class GameCanvas extends JComponent {
 		b2 = new Crate(300,100,100,2);
 		b3 = new Crate(100,300,100,2);
 		b4 = new Crate(300,300,100,2);
-		bomb = null;
+		
+		//making bombs for every player, add to bombs list
+		bomb1 = new Bomb(0,0);
+		bomb2 = new Bomb(400,400);
+		bombs = new ArrayList<>();
+		bombs.add(bomb1);
+		bombs.add(bomb2);
 		
 		// adding all crate objects into an arraylist
 		unMoving = new ArrayList<>();
@@ -59,10 +65,6 @@ public class GameCanvas extends JComponent {
 		setPreferredSize(new Dimension(w, h));
 	}
 
-	public Bomb newBomb (int x, int y){
-		bomb = new Bomb(x,y);
-		return bomb;
-	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -76,10 +78,8 @@ public class GameCanvas extends JComponent {
 		chick.draw(g2d);
 		spicy.draw(g2d);
 	
-
-		if (bomb != null){
-			bomb.draw(g2d); 
-		}
+		bomb1.draw(g2d);
+		bomb2.draw(g2d);
 
 		for (Thing o : unMoving){
 			o.draw(g2d);
@@ -99,6 +99,18 @@ public class GameCanvas extends JComponent {
 
 	public ArrayList getUnmoving(){
 		return unMoving;
+	}
+
+	public Bomb getBomb1(){
+		return bomb1;
+	}
+
+	public Bomb getBomb2(){
+		return bomb2;
+	}
+	
+	public ArrayList getBombs(){
+		return bombs;
 	}
 
 

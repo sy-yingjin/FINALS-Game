@@ -8,7 +8,7 @@ import java.awt.geom.*;
 public class Bomb implements Thing{
     private int x, y, width, height, range, bombFrame, frame;
 	private int counter;
-    public BufferedImage bomb1, bomb2, explode1, explode2;
+    public BufferedImage bomb1, bomb2, explode1, explode2, blank;
     public BufferedImage image = null;
     private boolean explosion;
     private Timer timer;
@@ -32,6 +32,7 @@ public class Bomb implements Thing{
             bomb2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/bomb 2.png"));
             explode1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/explode 1.png"));
             explode2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/explode 2.png"));
+            blank = ImageIO.read(getClass().getResourceAsStream("/Sprites/blank.png"));
 
         }catch(IOException e){
             e.printStackTrace();
@@ -226,6 +227,7 @@ public class Bomb implements Thing{
         //         bombFrame ++;  
         //         }
         switch(frame){
+            
             case 1:
             image = bomb1;
             break;
@@ -239,7 +241,7 @@ public class Bomb implements Thing{
             image = explode2;
             break;
             case 5:
-            image = null;
+            image = blank;
             break;
           }
 

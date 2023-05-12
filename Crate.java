@@ -3,28 +3,25 @@ import javax.imageio.ImageIO;
 import java.io.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.*;
 
 public class Crate implements Thing{
     private int x, y, width, height, type;
-    public BufferedImage crate, block, speedDrop, powerDrop, rangeDrop, destroy;
+    public BufferedImage crate, destroy;
+	public BufferedImage speedDrop, powerDrop, rangeDrop;
     public BufferedImage image = null; 
     public boolean bombed; //not yet sure how to code this...
 
-    public Crate(int x, int y, int size, int type){
+    public Crate(int x, int y){
         this.x = x;
         this.y = y;
-        width = size;
-        height = size;
-        this.type = type;
-        // 1 = empty, 2 = wall, 3 = speed drop, 4 = power drop, 5 = range drop
+        width = 100;
+        height = 100;
         crateImage();
     }
 
     public void crateImage(){
         try{
             crate = ImageIO.read(getClass().getResourceAsStream("/Sprites/crate.png"));
-            block = ImageIO.read(getClass().getResourceAsStream("/Sprites/block.png"));
             speedDrop = ImageIO.read(getClass().getResourceAsStream("/Sprites/add speed.png"));
             powerDrop = ImageIO.read(getClass().getResourceAsStream("/Sprites/add power.png"));
             rangeDrop = ImageIO.read(getClass().getResourceAsStream("/Sprites/add range.png"));
@@ -51,6 +48,10 @@ public class Crate implements Thing{
     public void setY(int n){
         y = n;
     }
+	
+	public void setType(int i) {
+		type = i;
+	}
 
     public int getHeight(){
         return height;
@@ -76,18 +77,16 @@ public class Crate implements Thing{
     public void draw(Graphics2D g){
         switch(type){
             case 1:
-                image = crate;
+                image = destroy;
                 break;
             case 2:
-                image = block;
+                image = null;
                 break;
-			case 3:
-				image = null;
+			default:
+				image = crate;
 				break;
             }
         g.drawImage(image,x,y,width,height,null);
 
     }
-
-
 }

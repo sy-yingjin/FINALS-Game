@@ -3,7 +3,6 @@ import javax.imageio.ImageIO;
 import java.io.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.*;
 
 public class Player implements Thing{
     private int x, y, width, height, HP, counter, spriteNum, spriteCount;

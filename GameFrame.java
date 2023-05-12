@@ -18,6 +18,7 @@ public class GameFrame {
 	private boolean up, down, left, right, space, max, bombCounter;
 	private Player me, enemy;
 	private ArrayList<Crate> unMoving;
+	private ArrayList<Wall> unMovable;
 	private ArrayList<Bomb> bombs;
 	private int playerID;
 	private Bomb myBomb, enemyBomb;
@@ -36,6 +37,9 @@ public class GameFrame {
 		Start = new JButton("START");
 		Controls = new JButton("CONTROLS");
 		speed = 25;
+		
+		unMoving = gCanvas.getUnmoving();
+		unMovable = gCanvas.getUnmovable();
 	}
 	
 	public void setUpGUI() {
@@ -223,8 +227,7 @@ public class GameFrame {
 					gCanvas.repaint();	
 				}
 				
-				unMoving = gCanvas.getUnmoving();
-				// Goes through ArrayList of Collideable
+				// Goes through ArrayList of Collideable Crates
 				for ( Thing o : unMoving ) {
 					// checks for collision
 					// won't go through this if False
@@ -252,7 +255,52 @@ public class GameFrame {
 							gCanvas.repaint();
 						}
 					}
-				}	
+				}
+
+				// Goes through ArrayList of Collideable Walls
+				for ( Thing o : unMovable ) {
+					// checks for collision
+					// won't go through this if False
+					// will bug out if u press keys at the same time
+					if ( me.isColliding(o) ) {
+						if ( right ) {
+							// collision on left
+							me.moveH(-speed);
+							me.spriteChange();
+							gCanvas.repaint();
+						} else if ( left ) {
+							// collision on right
+							me.moveH(speed);
+							me.spriteChange();
+							gCanvas.repaint();
+						} else if ( down ) {
+							// collision on up
+							me.moveV(-speed);
+							me.spriteChange();
+							gCanvas.repaint();
+						} else if ( up ) {
+							// collision on down
+							me.moveV(speed);
+							me.spriteChange();
+							gCanvas.repaint();
+						}
+					}
+				}
+				
+				//crate's animation and collision
+				int goneYet = myBomb.getFrame();
+				for (Crate o : unMoving) {
+					
+					if ( o.isColliding(myBomb) ) {
+						System.out.println("Ouch!");
+						o.setType(1);
+						gCanvas.repaint();
+						if (goneYet == 5) {
+							o.setType(2);
+							gCanvas.repaint();
+						}
+					}
+				}
 			}
 		};
 		animationTimer = new Timer(interval, al);

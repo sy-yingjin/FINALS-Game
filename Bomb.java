@@ -3,7 +3,6 @@ import javax.imageio.ImageIO;
 import java.io.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.*;
 
 public class Bomb implements Thing{
     private int x, y, width, height, frame;
@@ -59,8 +58,25 @@ public class Bomb implements Thing{
         return width;
     }
 	
+	public boolean isColliding(Thing r) {
+		
+        if ( this.x + this.width <= r.getX() || // from left side
+			this.x >= r.getX() + r.getWidth() || // from right side
+			this.y + this.height <= r.getY() || // from top side
+			this.y >= r.getY() + r.getHeight() ) // from bottom side
+        {
+            return false;
+        } else {
+            return true;
+        }
+    }
+	
 	public void setFrame(int i) {
 		frame = i;
+	}
+	
+	public int getFrame() {
+		return frame;
 	}
 	
 	public void addCounter() {
@@ -108,8 +124,6 @@ public class Bomb implements Thing{
 		g.drawImage(boomB,x-100,y,width,height,null); //left
 		g.drawImage(boomB,x,y+100,width,height,null); //down
 		g.drawImage(boomB,x,y-100,width,height,null); //up
-		
-		
 		
     }
 	

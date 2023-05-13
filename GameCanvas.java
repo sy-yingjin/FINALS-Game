@@ -89,10 +89,8 @@ public class GameCanvas extends JComponent {
 
 	public void drawScreen(Graphics2D g){
         if (titleScreen){
-			System.out.println("true na yung screen");
 			screen = title;
 		} else {
-			System.out.println("false na yung screen");
 			screen = null;
 		}
         g.drawImage(screen,0,0,width,height,null);

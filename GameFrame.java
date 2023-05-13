@@ -376,6 +376,7 @@ public class GameFrame {
 			try {
 				while(true) {
 					if (me != null)  {
+						
 						dataOut.writeDouble(me.getX());
 						dataOut.writeDouble(me.getY());
 						dataOut.flush();

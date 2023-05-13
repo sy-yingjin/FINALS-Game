@@ -84,7 +84,7 @@ public class Player implements Thing{
         }
 
     }
-	
+    
     public boolean isColliding(Thing r) {
 		
         if ( this.x + this.width <= r.getX() || // from left side

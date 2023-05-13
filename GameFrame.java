@@ -6,18 +6,16 @@ import java.io.*;
 import java.net.*;
 
 
+
 public class GameFrame {
 	private Container contentPane;
 	private JFrame frame;
 	private GameCanvas gCanvas;
-	private JButton Start;
-	private JButton Controls;
-	private JPanel buttonsPanel;
 	private Timer animationTimer;
 	private int speed, width, height;
-	private boolean up, down, left, right, space, max, bombCounter;
+	private boolean up, down, left, right, space, start, restart, max, bombCounter;
 	private Player me, enemy;
-	private ArrayList<Crate> unMoving;
+	private ArrayList<Crate> bombable;
 	private ArrayList<Wall> unMovable;
 	private ArrayList<Bomb> bombs;
 	private int playerID;
@@ -34,31 +32,25 @@ public class GameFrame {
 		height = h;
 		frame = new JFrame();
 		gCanvas = new GameCanvas(w, h);
-		Start = new JButton("START");
-		Controls = new JButton("CONTROLS");
 		speed = 25;
 		
-		unMoving = gCanvas.getUnmoving();
+		bombable = gCanvas.getBombable();
 		unMovable = gCanvas.getUnmovable();
 	}
 	
 	public void setUpGUI() {
 		contentPane = frame.getContentPane();
-		buttonsPanel = new JPanel();
 		createPlayers();
-
+		gCanvas.setScreen(true);
 		/*Setting up the actual GUI was pretty fun when you know what you can mess with without messing up the program*/
-		/** buttonsPanel.setLayout(new GridLayout(1,2));
-		buttonsPanel.add(Start);
-		buttonsPanel.add(Controls);
-	
-		contentPane.add(buttonsPanel, BorderLayout.SOUTH); **/
+
 		contentPane.add(gCanvas, BorderLayout.CENTER);
 		
-		frame.setTitle("Bomb-A Man");
+		frame.setTitle("Fry-A-Chick!");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);	
+
 		
 		setUpAnimationTimer();	
 		setUpKeyListener();
@@ -104,6 +96,13 @@ public class GameFrame {
 					case KeyEvent.VK_SPACE :
 						space = true;
 						break;
+					case KeyEvent.VK_O :
+						start = true;
+						gCanvas.setScreen(false);
+						break;
+					case KeyEvent.VK_K :
+						restart = true;
+						break;
 				}
 			}
 			
@@ -140,167 +139,177 @@ public class GameFrame {
 		ActionListener al = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				if(up && !down && !left && !right) {
-					me.moveV(-speed);
-					me.spriteChange();
+				if(start){
 					gCanvas.repaint();
-				} else if(down && !up && !left && !right) {
-					me.moveV(speed);
-					me.spriteChange();
-					gCanvas.repaint();	
-				} else if(left && !up && !down && !right) {
-					me.moveH(-speed);
-					me.spriteChange();
-					gCanvas.repaint();
-				} else if(right && !up && !down && !left) {
-					me.moveH(speed);
-					me.spriteChange();
-					gCanvas.repaint();
-					
-				} else if(space && bombCounter == false) { //create a bomb
-					
-					myBomb.setX(me.getX());
-					myBomb.setY(me.getY());
-					boolean bombSet = true;
-					bombCounter = true;
-					while(bombSet){
-						timer = new Timer(80, new ActionListener(){
-							@Override
-							public void actionPerformed(ActionEvent e){
-								int check = myBomb.checkCounter();
-								if (check <= 20) {
-									myBomb.setFrame(1);
-									myBomb.addCounter();
-									gCanvas.repaint();
-								} else if (check > 20 && check <= 40) {
-									myBomb.setFrame(2);
-									myBomb.addCounter();
-									gCanvas.repaint();
-								} else if (check > 40 && check <= 50) {
-									myBomb.setFrame(3);
-									myBomb.addCounter();
-									gCanvas.repaint();
-								} else if (check > 50 && check <= 80) {
-									myBomb.setFrame(4);
-									myBomb.addCounter();
-									gCanvas.repaint();
-								} else if (check > 80) {
-									myBomb.setFrame(5);
-									gCanvas.repaint();
-									max = true;
-								}
-	
-								if (max){
-									timer.stop();
-									timer.setRepeats(false);
-									System.out.println("stop!");						
-									myBomb.resetCounter();
-									max = false;
-									bombCounter = false;
-								}
-								
-							}
-						});	
-						timer.start(); 
-						bombSet = false;
-						
-					}
-					System.out.println("boom");
-				}
-				
-				//border collision to the edge of the frame
-				if (me.getX() + me.getWidth() > width) { //if player is too right
-					me.moveH(-speed);
-					me.spriteChange();
-					gCanvas.repaint();	
-				} else if (me.getX() < 0) { //if player too left
-					me.moveH(speed);
-					me.spriteChange();
-					gCanvas.repaint();	
-				} else if (me.getY() + me.getHeight() > height) { //if player too down
-					me.moveV(-speed);
-					me.spriteChange();
-					gCanvas.repaint();	
-				} else if (me.getY() < 0) { // if player too up
-					me.moveV(speed);
-					me.spriteChange();
-					gCanvas.repaint();	
-				}
-				
-				// Goes through ArrayList of Collideable Crates
-				for ( Thing o : unMoving ) {
-					// checks for collision
-					// won't go through this if False
-					// will bug out if u press keys at the same time
-					if ( me.isColliding(o) ) {
-						if ( right ) {
-							// collision on left
-							me.moveH(-speed);
-							me.spriteChange();
-							gCanvas.repaint();
-						} else if ( left ) {
-							// collision on right
-							me.moveH(speed);
-							me.spriteChange();
-							gCanvas.repaint();
-						} else if ( down ) {
-							// collision on up
-							me.moveV(-speed);
-							me.spriteChange();
-							gCanvas.repaint();
-						} else if ( up ) {
-							// collision on down
-							me.moveV(speed);
-							me.spriteChange();
-							gCanvas.repaint();
-						}
-					}
-				}
-
-				// Goes through ArrayList of Collideable Walls
-				for ( Thing o : unMovable ) {
-					// checks for collision
-					// won't go through this if False
-					// will bug out if u press keys at the same time
-					if ( me.isColliding(o) ) {
-						if ( right ) {
-							// collision on left
-							me.moveH(-speed);
-							me.spriteChange();
-							gCanvas.repaint();
-						} else if ( left ) {
-							// collision on right
-							me.moveH(speed);
-							me.spriteChange();
-							gCanvas.repaint();
-						} else if ( down ) {
-							// collision on up
-							me.moveV(-speed);
-							me.spriteChange();
-							gCanvas.repaint();
-						} else if ( up ) {
-							// collision on down
-							me.moveV(speed);
-							me.spriteChange();
-							gCanvas.repaint();
-						}
-					}
-				}
-				
-				//crate's animation and collision
-				int goneYet = myBomb.getFrame();
-				for (Crate o : unMoving) {
-					
-					if ( o.isColliding(myBomb) ) {
-						System.out.println("Ouch!");
-						o.setType(1);
+					if(up && !down && !left && !right) {
+						me.moveV(-speed);
+						me.spriteChange();
 						gCanvas.repaint();
-						if (goneYet == 5) {
-							o.setType(2);
-							gCanvas.repaint();
+					} else if(down && !up && !left && !right) {
+						me.moveV(speed);
+						me.spriteChange();
+						gCanvas.repaint();	
+					} else if(left && !up && !down && !right) {
+						me.moveH(-speed);
+						me.spriteChange();
+						gCanvas.repaint();
+					} else if(right && !up && !down && !left) {
+						me.moveH(speed);
+						me.spriteChange();
+						gCanvas.repaint();
+						
+					} else if(space && bombCounter == false) { //create a bomb
+						
+						myBomb.setX(me.getX());
+						myBomb.setY(me.getY());
+						boolean bombSet = true;
+						bombCounter = true;
+						while(bombSet){
+							timer = new Timer(80, new ActionListener(){
+								@Override
+								public void actionPerformed(ActionEvent e){
+									int check = myBomb.checkCounter();
+									if (check <= 20) {
+										myBomb.setFrame(1);
+										myBomb.addCounter();
+										gCanvas.repaint();
+									} else if (check > 20 && check <= 40) {
+										myBomb.setFrame(2);
+										myBomb.addCounter();
+										gCanvas.repaint();
+									} else if (check > 40 && check <= 50) {
+										myBomb.setFrame(3);
+										myBomb.addCounter();
+										gCanvas.repaint();
+									} else if (check > 50 && check <= 80) {
+										myBomb.setFrame(4);
+										myBomb.addCounter();
+										gCanvas.repaint();
+									} else if (check > 80) {
+										myBomb.setFrame(5);
+										gCanvas.repaint();
+										max = true;
+									}
+		
+									if (max){
+										timer.stop();
+										timer.setRepeats(false);
+										System.out.println("stop!");						
+										myBomb.resetCounter();
+										max = false;
+										bombCounter = false;
+									}
+									
+								}
+							});	
+							timer.start(); 
+							bombSet = false;
+							
+						}
+						System.out.println("boom");
+					}
+					
+					//border collision to the edge of the frame
+					if (me.getX() + me.getWidth() > width) { //if player is too right
+						me.moveH(-speed);
+						me.spriteChange();
+						gCanvas.repaint();	
+					} else if (me.getX() < 0) { //if player too left
+						me.moveH(speed);
+						me.spriteChange();
+						gCanvas.repaint();	
+					} else if (me.getY() + me.getHeight() > height) { //if player too down
+						me.moveV(-speed);
+						me.spriteChange();
+						gCanvas.repaint();	
+					} else if (me.getY() < 0) { // if player too up
+						me.moveV(speed);
+						me.spriteChange();
+						gCanvas.repaint();	
+					}
+					
+					// Goes through ArrayList of Collideable Crates
+					for ( Thing o : bombable ) {
+						// checks for collision
+						// won't go through this if False
+						// will bug out if u press keys at the same time
+						if ( me.isColliding(o) ) {
+							if ( right ) {
+								// collision on left
+								me.moveH(-speed);
+								me.spriteChange();
+								gCanvas.repaint();
+							} else if ( left ) {
+								// collision on right
+								me.moveH(speed);
+								me.spriteChange();
+								gCanvas.repaint();
+							} else if ( down ) {
+								// collision on up
+								me.moveV(-speed);
+								me.spriteChange();
+								gCanvas.repaint();
+							} else if ( up ) {
+								// collision on down
+								me.moveV(speed);
+								me.spriteChange();
+								gCanvas.repaint();
+							}
 						}
 					}
+	
+					// Goes through ArrayList of Collideable Walls
+					for ( Thing o : unMovable ) {
+						// checks for collision
+						// won't go through this if False
+						// will bug out if u press keys at the same time
+						if ( me.isColliding(o) ) {
+							if ( right ) {
+								// collision on left
+								me.moveH(-speed);
+								me.spriteChange();
+								gCanvas.repaint();
+							} else if ( left ) {
+								// collision on right
+								me.moveH(speed);
+								me.spriteChange();
+								gCanvas.repaint();
+							} else if ( down ) {
+								// collision on up
+								me.moveV(-speed);
+								me.spriteChange();
+								gCanvas.repaint();
+							} else if ( up ) {
+								// collision on down
+								me.moveV(speed);
+								me.spriteChange();
+								gCanvas.repaint();
+							}
+						}
+					}
+					
+					//crate's animation and collision
+					int goneYet = myBomb.getFrame();
+					for (Crate o : bombable) {
+						if ( o.isColliding(myBomb) ) {
+							System.out.println("Ouch!");
+							o.setType(1);
+							gCanvas.repaint();
+							if (goneYet == 5) {
+								o.setType(2);
+								gCanvas.repaint();
+							}
+						}
+					}
+
+					if(restart){
+						gCanvas.restart();
+						start = false;
+						restart = false;
+						gCanvas.repaint();
+					}
 				}
+				
 			}
 		};
 		animationTimer = new Timer(interval, al);

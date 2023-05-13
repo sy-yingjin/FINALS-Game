@@ -3,6 +3,10 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
 import java.util.ArrayList; 
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.*;
+
 
 public class GameCanvas extends JComponent {
 	private int width;
@@ -12,9 +16,12 @@ public class GameCanvas extends JComponent {
 	private Crate c1, c2, c3, c4, c5, c6, c7, c8, c9;
 	private Wall b1, b2, b3, b4;
 	private Bomb bomb1, bomb2;
-	
-	private ArrayList<Thing> unMoving;
+	//title screen
+	private BufferedImage screen, title;
+	private boolean titleScreen;
+	private ArrayList<Crate> bombable;
 	private ArrayList<Thing> unMovable;
+
 	
 	public GameCanvas(int w, int h) {
 		width = w;
@@ -43,16 +50,16 @@ public class GameCanvas extends JComponent {
 		bomb2 = new Bomb(400,400);
 		
 		// adding all crate objects into an arraylist
-		unMoving = new ArrayList<>();
-		unMoving.add(c1);
-		unMoving.add(c2);
-		unMoving.add(c3);
-		unMoving.add(c4);
-		unMoving.add(c5);
-		unMoving.add(c6);
-		unMoving.add(c7);
-		unMoving.add(c8);
-		unMoving.add(c9);
+		bombable = new ArrayList<>();
+		bombable.add(c1);
+		bombable.add(c2);
+		bombable.add(c3);
+		bombable.add(c4);
+		bombable.add(c5);
+		bombable.add(c6);
+		bombable.add(c7);
+		bombable.add(c8);
+		bombable.add(c9);
 		
 		//adding all wall objects into an arraylist
 		unMovable = new ArrayList<>();
@@ -61,12 +68,42 @@ public class GameCanvas extends JComponent {
 		unMovable.add(b3);
 		unMovable.add(b4);
 
+		getScreen();
+		screen = title;
+
 		setPreferredSize(new Dimension(w, h));
 	}
 	
+	public void getScreen(){
+		try{
+            title = ImageIO.read(getClass().getResourceAsStream("/Sprites/Title Screen.jpg"));
+
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+	}
+
+	public void setScreen(boolean s){
+		titleScreen = s;
+	}
+
+	public void drawScreen(Graphics2D g){
+        if (titleScreen){
+			System.out.println("true na yung screen");
+			screen = title;
+		} else {
+			System.out.println("false na yung screen");
+			screen = null;
+		}
+        g.drawImage(screen,0,0,width,height,null);
+    }
+
+
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
+		
 		
 		Rectangle2D.Double background = new Rectangle2D.Double(0,0,width,height);
 		g2d.setPaint(Color.BLACK);
@@ -74,18 +111,22 @@ public class GameCanvas extends JComponent {
 
 		chick.draw(g2d);
 		spicy.draw(g2d);
-	
+		
 		bomb1.draw(g2d);
 		bomb2.draw(g2d);
 
-		for (Thing o : unMoving){
+		for (Thing o : bombable){
 			o.draw(g2d);
 		}
 		
 		for (Thing r : unMovable) {
 			r.draw(g2d);
 		}
+
+		drawScreen(g2d);
 	}
+
+	
 	
 	//returning playersprites and arraylist for it to be accessible in GameFrame
 	
@@ -97,8 +138,8 @@ public class GameCanvas extends JComponent {
 		return spicy;
 	}
 
-	public ArrayList getUnmoving(){
-		return unMoving;
+	public ArrayList getBombable(){
+		return bombable;
 	}
 	
 	public ArrayList getUnmovable() {
@@ -111,5 +152,16 @@ public class GameCanvas extends JComponent {
 
 	public Bomb getBomb2(){
 		return bomb2;
+	}
+
+	public void restart(){
+		titleScreen = true;
+		chick.setX(0);
+		chick.setY(0);
+		spicy.setX(400);
+		spicy.setY(400);
+		for(Crate o : bombable){
+			o.setType(0);
+		}
 	}
 }

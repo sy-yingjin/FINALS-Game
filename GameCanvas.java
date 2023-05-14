@@ -150,7 +150,9 @@ public class GameCanvas extends JComponent {
 
 	public void restart(){
 		titleScreen = true;
-		
+		bomb1.setFrame(5);
+		bomb2.setFrame(5);
+
 		bombable.add(0, c1);
 		bombable.add(1, c2);
 		bombable.add(2, c3);
@@ -168,8 +170,7 @@ public class GameCanvas extends JComponent {
 		for(Crate o : bombable){
 			o.setType(0);
 		}
-		bomb1.setFrame(5);
-		bomb2.setFrame(5);
+		
 		
 	}
 }

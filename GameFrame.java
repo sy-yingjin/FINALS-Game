@@ -11,7 +11,7 @@ public class GameFrame {
 	private GameCanvas gCanvas;
 	private Timer animationTimer;
 	private int speed, width, height, index;
-	private boolean up, down, left, right, space, start, restart, max, bombCounter;
+	private boolean up, down, left, right, space, start, restart, max, bombCounter, bombSet;
 	private Player me, enemy;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Wall> unMovable;
@@ -158,7 +158,7 @@ public class GameFrame {
 						//create a bomb
 						myBomb.setX(me.getX());
 						myBomb.setY(me.getY());
-						boolean bombSet = true;
+						bombSet = true;
 						bombCounter = true;
 						
 						while(bombSet){
@@ -184,10 +184,14 @@ public class GameFrame {
 												c.setType(1);
 												gCanvas.repaint();
 												myBomb.addCounter();
+												System.out.println(check);
 												if (check >= 50){
+													System.out.print("in");
+													System.out.println(check);
+													myBomb.addCounter();
+													System.out.println(bombable.size());
 													gCanvas.removeCrate(bombable.indexOf(c));
-													gCanvas.repaint();
-													myBomb.addCounter();		
+													gCanvas.repaint();			
 												}
 												break;
 											}
@@ -200,8 +204,6 @@ public class GameFrame {
 										myBomb.setFrame(5);
 										gCanvas.repaint();
 										max = true;
-										rightFrame = false;
-										nextFrame = false;
 									}
 		
 									if (max){
@@ -266,7 +268,6 @@ public class GameFrame {
 							}
 						}
 					}
-	
 					// Goes through ArrayList of Collideable Walls
 					for ( Thing o : unMovable ) {
 						// checks for collision
@@ -296,12 +297,18 @@ public class GameFrame {
 							}
 						}
 					}
-					
 					if(restart){
+						bombable.clear();
 						gCanvas.restart();
 						myBomb.resetCounter();
 						start = false;
+						bombSet = false;
 						restart = false;
+						myBomb.setFrame(5);
+						bombCounter = false;
+						timer.stop();
+						timer.setRepeats(false);
+						bombable = gCanvas.getBombable();
 						gCanvas.repaint();
 					}
 				}

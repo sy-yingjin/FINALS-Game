@@ -12,8 +12,8 @@ public class GameFrame {
 	private JFrame frame;
 	private GameCanvas gCanvas;
 	private Timer animationTimer;
-	private int speed, width, height;
-	private boolean up, down, left, right, space, start, restart, max, bombCounter;
+	private int speed, width, height, index;
+	private boolean up, down, left, right, space, start, restart, max, bombCounter, kaboom;
 	private Player me, enemy;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Wall> unMovable;
@@ -180,21 +180,45 @@ public class GameFrame {
 										gCanvas.repaint();
 										
 										//crate collision action
-										for (int i = 0; i<= bombable.size(); i++ ) {
+										for (Crate c : bombable) {
 											System.out.println(check);
-											Crate index = bombable.get(i);
-											if ( myBomb.rangeCheck(index) ) {
-												index.setType(1);
+											//Crate index = bombable.get(i);
+											//System.out.println(myBomb.rangeCheck(index));
+											System.out.println(myBomb.getX()-100);
+											System.out.println(myBomb.getY()-100);
+											System.out.println(myBomb.getX()+myBomb.getWidth()+100);
+											System.out.println(myBomb.getY()+myBomb.getHeight()+100);
+											String hit =  myBomb.rangeCheck(c.getX(), c.getY()); 
+											switch(hit){
+												case "right hit":
+												// if (myBomb.getX()+100 + myBomb.getWidth() <= c.getX() || // from left side
+												// 	myBomb.getX()+100 > c.getX()+100 || // from right side
+												// 	myBomb.getY()+ myBomb.getHeight() <= c.getY() || // from top side
+												// 	myBomb.getY() >= c.getY()+100 ) { // from bottom side
+												// 		kaboom = true;
+												// 		index = bombable.indexOf(c);
+												// 	}
+
+												// break;
+												// case "left hit":
+												// break;
+												// case "top hit":
+												// break;
+												// case "bottom hit":
+												// break;
+											}
+											if (kaboom) {
+												c.setType(1);
 												gCanvas.repaint();
 												myBomb.addCounter();
 												if (check >= 50) {
-													gCanvas.removeCrate(i);
+													gCanvas.removeCrate(index);
 													gCanvas.repaint();
 													myBomb.addCounter();
+													kaboom = false;
 												}
 												System.out.println("Ouch!");
 												break;
-												
 											}
 										}
 									} else if (check > 50 && check <= 80) {

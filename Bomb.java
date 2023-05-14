@@ -10,6 +10,8 @@ public class Bomb implements Thing{
     public BufferedImage bomb1, bomb2, explode1, explode2;
     public BufferedImage image = null;
 	public BufferedImage boomB;
+	
+	private String mess;
 
     public Bomb(int x, int y){
         this.x = x;
@@ -19,6 +21,7 @@ public class Bomb implements Thing{
         bombImage();
         frame = 0;
 		counter = 0;
+		mess = "";
     }
 
     public void bombImage(){
@@ -77,41 +80,63 @@ public class Bomb implements Thing{
 		counter = 0;
 	}
 	
-	public boolean rangeCheck(Crate c) {
+	public boolean rangeCheck(Thing c) {
+		if (
+			// checks middle explosion
+			x + width > c.getX() && // from left side
+			x < c.getX() + c.getWidth() && // from right side
+			y + height > c.getY() && // from top side
+			y < c.getY() + c.getHeight() ) { // from bottom side
+				mess = "Right";
+				return true;
+		}
+		
 		if (
 			// checks right explosion
-			this.x+100 + this.width < c.getX() || // from left side
-			this.x+100 > c.getX() + c.getWidth() || // from right side
-			this.y + this.height < c.getY() || // from top side
-			this.y > c.getY() + c.getHeight() ) { // from bottom side
+			x+100 + width > c.getX() && // from left side
+			x+100 < c.getX() + c.getWidth() && // from right side
+			y + height > c.getY() && // from top side
+			y < c.getY() + c.getHeight() ) { // from bottom side
+				mess = "Right";
 				return true;
-		} 
+		}
+		
         if ( 
 			//  checks left explosion
-			this.x-100 + this.width < c.getX() || // from left side
-			this.x-100 >= c.getX() + c.getWidth() || // from right side
-			this.y + this.height < c.getY() || // from top side
-			this.y > c.getY() + c.getHeight() ) { // from bottom side
+			x-100 + width > c.getX() && // from left side
+			x-100 < c.getX() + c.getWidth() && // from right side
+			y + height > c.getY() && // from top side
+			y < c.getY() + c.getHeight() ) { // from bottom side
+				mess = "Left";
 				return true;
-		} 
+		}
+		
         if ( 
 			// checks top explosion
-			this.x + this.width < c.getX() || // from left side
-			this.x > c.getX() + c.getWidth() || // from right side
-			this.y-100 + this.height < c.getY() || // from top side
-			this.y-100 > c.getY() + c.getHeight() ) { // from bottom side
+			x + width > c.getX() && // from left side
+			x < c.getX() + c.getWidth() && // from right side
+			y-100 + height > c.getY() && // from top side
+			y-100 < c.getY() + c.getHeight() ) { // from bottom side
+				mess = "Top";
 				return true;
 		} 
+		
         if ( 
 			// checks bottom explosion
-			this.x + this.width < c.getX() || // from left side
-			this.x > c.getX() + c.getWidth() || // from right side
-			this.y+100 + this.height < c.getY() || // from top side
-			this.y+100 > c.getY() + c.getHeight() ) {// from bottom side
+			x + width > c.getX() && // from left side
+			x < c.getX() + c.getWidth() && // from right side
+			y+100 + height > c.getY() && // from top side
+			y+100 < c.getY() + c.getHeight() ) {// from bottom side
+				mess = "Down";
 				return true;
 		} else {
+				mess = "None";
 				return false;
 		}
+	}
+	
+	public String getMess() {
+		return mess;
 	}
 
     public void draw(Graphics2D g){

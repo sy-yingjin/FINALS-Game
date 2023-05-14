@@ -185,6 +185,7 @@ public class GameFrame {
 										for (Crate c : bombable) {
 											if(myBomb.rangeCheck(c)){
 												System.out.println(myBomb.rangeCheck(c));
+												System.out.println(myBomb.getMess());
 												System.out.println(bombable.indexOf(c));
 												c.setType(1);
 												gCanvas.repaint();

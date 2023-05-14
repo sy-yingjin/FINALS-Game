@@ -154,11 +154,13 @@ public class GameFrame {
 						me.spriteChange();
 						gCanvas.repaint();
 						
-					} else if(space && bombCounter == false) { //create a bomb
+					} else if(space && bombCounter == false) {
+						//create a bomb
 						myBomb.setX(me.getX());
 						myBomb.setY(me.getY());
 						boolean bombSet = true;
 						bombCounter = true;
+						
 						while(bombSet){
 							timer = new Timer(80, new ActionListener(){
 								@Override
@@ -176,14 +178,17 @@ public class GameFrame {
 										myBomb.setFrame(3);
 										myBomb.addCounter();
 										gCanvas.repaint();
-										for (Crate r : bombable) {
+										
+										//crate collision action
+										for (int i = 0; i<= bombable.size(); i++ ) {
 											System.out.println(check);
-											if ( myBomb.rangeCheck(r) ) {
-												r.setType(1);
+											Crate index = bombable.get(i);
+											if ( myBomb.rangeCheck(index) ) {
+												index.setType(1);
 												gCanvas.repaint();
 												myBomb.addCounter();
 												if (check >= 50) {
-													gCanvas.removeCrate(r);
+													gCanvas.removeCrate(i);
 													gCanvas.repaint();
 													myBomb.addCounter();
 												}

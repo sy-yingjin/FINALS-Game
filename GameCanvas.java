@@ -69,7 +69,6 @@ public class GameCanvas extends JComponent {
 		unMovable.add(b4);
 
 		getScreen();
-		//getRange();
 		screen = title;
 		boom = null;
 		setPreferredSize(new Dimension(w, h));
@@ -83,14 +82,6 @@ public class GameCanvas extends JComponent {
             e.printStackTrace();
         }
 	}
-	
-	// public void getRange(){
-	// 	try{
-    //         explode2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/explode 2.jpg"));
-    //     }catch(IOException e){
-    //         e.printStackTrace();
-    //     }
-	// }
 
 	public void setScreen(boolean s){
 		titleScreen = s;
@@ -104,36 +95,10 @@ public class GameCanvas extends JComponent {
 		}
         g.drawImage(screen,0,0,width,height,null);
     }
-	
-	// public void drawRange(Graphics2D g) {
-	// 	int x1 = bomb1.getX();
-	// 	int y1 = bomb1.getY();
-	// 	int x2 = bomb2.getX();
-	// 	int y2 = bomb2.getY();
-		
-	// 	if (bomb1.getFrame() == 4) {
-	// 		boom = explode2;
-	// 		g.drawImage(boom,x1+100,y1,100,100,null);
-	// 		g.drawImage(boom,x1-100,y1,100,100,null);
-	// 		g.drawImage(boom,x1,y1+100,100,100,null);
-	// 		g.drawImage(boom,x1,y1-100,100,100,null);
-	// 	}
-			
-	// 	if (bomb2.getFrame() == 4) {
-	// 		boom = explode2;
-	// 		g.drawImage(boom,x2+100,y2,100,100,null);
-	// 		g.drawImage(boom,x2-100,y2,100,100,null);
-	// 		g.drawImage(boom,x2,y2+100,100,100,null);
-	// 		g.drawImage(boom,x2,y2-100,100,100,null);
-	// 	}
-		
-	// 	boom = null;
-	// }
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		
 		
 		Rectangle2D.Double background = new Rectangle2D.Double(0,0,width,height);
 		g2d.setPaint(Color.BLACK);
@@ -145,8 +110,6 @@ public class GameCanvas extends JComponent {
 		bomb1.draw(g2d);
 		bomb2.draw(g2d);
 		
-		//drawRange(g2d);
-
 		for (Thing o : bombable){
 			o.draw(g2d);
 		}
@@ -183,9 +146,8 @@ public class GameCanvas extends JComponent {
 		return bomb2;
 	}
 	
-	public void removeCrate(Thing o) {
-		int item = bombable.indexOf(o);
-		bombable.remove(item);
+	public void removeCrate(int i) {
+		bombable.remove(i);
 	}
 	
 

@@ -19,7 +19,6 @@ public class Bomb implements Thing{
         bombImage();
         frame = 0;
 		counter = 0;
-
     }
 
     public void bombImage(){

@@ -18,7 +18,6 @@ public class GameCanvas extends JComponent {
 	private Bomb bomb1, bomb2;
 	//title screen
 	private BufferedImage screen, title;
-    public BufferedImage explode2, boom;
 	private boolean titleScreen;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Thing> unMovable;
@@ -70,9 +69,7 @@ public class GameCanvas extends JComponent {
 
 		getScreen();
 		screen = title;
-		boom = null;
 		setPreferredSize(new Dimension(w, h));
-		
 	}
 	
 	public void getScreen(){

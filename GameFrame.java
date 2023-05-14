@@ -181,15 +181,10 @@ public class GameFrame {
 										//rightFrame = true;
 										for (Crate c : bombable) {
 											if(myBomb.rangeCheck(c)){
-												System.out.println(myBomb.rangeCheck(c));
-												System.out.println(myBomb.getMess());
-												System.out.println(bombable.indexOf(c));
 												c.setType(1);
 												gCanvas.repaint();
 												myBomb.addCounter();
-												System.out.println(check);
 												if (check >= 50){
-													System.out.println("remove");
 													gCanvas.removeCrate(bombable.indexOf(c));
 													gCanvas.repaint();
 													myBomb.addCounter();		
@@ -304,6 +299,7 @@ public class GameFrame {
 					
 					if(restart){
 						gCanvas.restart();
+						myBomb.resetCounter();
 						start = false;
 						restart = false;
 						gCanvas.repaint();

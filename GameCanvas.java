@@ -18,7 +18,7 @@ public class GameCanvas extends JComponent {
 	private Bomb bomb1, bomb2;
 	//title screen
 	private BufferedImage screen, title;
-    public BufferedImage explode2;
+    public BufferedImage explode2, boom;
 	private boolean titleScreen;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Thing> unMovable;
@@ -67,12 +67,11 @@ public class GameCanvas extends JComponent {
 		unMovable.add(b2);
 		unMovable.add(b3);
 		unMovable.add(b4);
-		
-		explode2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/explode 2.png"));
 
 		getScreen();
 		getRange();
 		screen = title;
+		boom = null;
 		setPreferredSize(new Dimension(w, h));
 		
 	}
@@ -87,7 +86,7 @@ public class GameCanvas extends JComponent {
 	
 	public void getRange(){
 		try{
-            explode2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Title Screen.jpg"));
+            explode2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/explode 2.jpg"));
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -113,18 +112,22 @@ public class GameCanvas extends JComponent {
 		int y2 = bomb2.getY();
 		
 		if (bomb1.getFrame() == 4) {
-			g.drawImage(explode2,x1+100,y1,100,100,null);
-			g.drawImage(explode2,x1-100,y1,100,100,null);
-			g.drawImage(explode2,x1,y1+100,100,100,null);
-			g.drawImage(explode2,x1,y1-100,100,100,null);
+			boom = explode2;
+			g.drawImage(boom,x1+100,y1,100,100,null);
+			g.drawImage(boom,x1-100,y1,100,100,null);
+			g.drawImage(boom,x1,y1+100,100,100,null);
+			g.drawImage(boom,x1,y1-100,100,100,null);
 		}
 			
 		if (bomb2.getFrame() == 4) {
-			g.drawImage(explode2,x2+100,y2,100,100,null);
-			g.drawImage(explode2,x2-100,y2,100,100,null);
-			g.drawImage(explode2,x2,y2+100,100,100,null);
-			g.drawImage(explode2,x2,y2-100,100,100,null);
+			boom = explode2;
+			g.drawImage(boom,x2+100,y2,100,100,null);
+			g.drawImage(boom,x2-100,y2,100,100,null);
+			g.drawImage(boom,x2,y2+100,100,100,null);
+			g.drawImage(boom,x2,y2-100,100,100,null);
 		}
+		
+		boom = null;
 	}
 
 	@Override

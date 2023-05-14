@@ -31,15 +31,15 @@ public class GameCanvas extends JComponent {
 		spicy = new Player(400,400,2);
 		
 		//making crates (breakable) and blocks (not breakable)
-		c1 = new Crate(400,0);
-		c2 = new Crate(200,0);
-		c3 = new Crate(300,0);
+		c1 = new Crate(200,0);
+		c2 = new Crate(300,0);
+		c3 = new Crate(400,0);
 		c4 = new Crate(0,200);
 		c5 = new Crate(200,200);
 		c6 = new Crate(400,200);
-		c7 = new Crate(100,400);
-		c8 = new Crate(200,400);
-		c9 = new Crate(0,400);
+		c7 = new Crate(0,400);
+		c8 = new Crate(100,400);
+		c9 = new Crate(200,400);
 		b1 = new Wall(100,100);
 		b2 = new Wall(300,100);
 		b3 = new Wall(100,300);
@@ -69,7 +69,7 @@ public class GameCanvas extends JComponent {
 		unMovable.add(b4);
 
 		getScreen();
-		getRange();
+		//getRange();
 		screen = title;
 		boom = null;
 		setPreferredSize(new Dimension(w, h));
@@ -84,13 +84,13 @@ public class GameCanvas extends JComponent {
         }
 	}
 	
-	public void getRange(){
-		try{
-            explode2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/explode 2.jpg"));
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-	}
+	// public void getRange(){
+	// 	try{
+    //         explode2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/explode 2.jpg"));
+    //     }catch(IOException e){
+    //         e.printStackTrace();
+    //     }
+	// }
 
 	public void setScreen(boolean s){
 		titleScreen = s;
@@ -105,30 +105,30 @@ public class GameCanvas extends JComponent {
         g.drawImage(screen,0,0,width,height,null);
     }
 	
-	public void drawRange(Graphics2D g) {
-		int x1 = bomb1.getX();
-		int y1 = bomb1.getY();
-		int x2 = bomb2.getX();
-		int y2 = bomb2.getY();
+	// public void drawRange(Graphics2D g) {
+	// 	int x1 = bomb1.getX();
+	// 	int y1 = bomb1.getY();
+	// 	int x2 = bomb2.getX();
+	// 	int y2 = bomb2.getY();
 		
-		if (bomb1.getFrame() == 4) {
-			boom = explode2;
-			g.drawImage(boom,x1+100,y1,100,100,null);
-			g.drawImage(boom,x1-100,y1,100,100,null);
-			g.drawImage(boom,x1,y1+100,100,100,null);
-			g.drawImage(boom,x1,y1-100,100,100,null);
-		}
+	// 	if (bomb1.getFrame() == 4) {
+	// 		boom = explode2;
+	// 		g.drawImage(boom,x1+100,y1,100,100,null);
+	// 		g.drawImage(boom,x1-100,y1,100,100,null);
+	// 		g.drawImage(boom,x1,y1+100,100,100,null);
+	// 		g.drawImage(boom,x1,y1-100,100,100,null);
+	// 	}
 			
-		if (bomb2.getFrame() == 4) {
-			boom = explode2;
-			g.drawImage(boom,x2+100,y2,100,100,null);
-			g.drawImage(boom,x2-100,y2,100,100,null);
-			g.drawImage(boom,x2,y2+100,100,100,null);
-			g.drawImage(boom,x2,y2-100,100,100,null);
-		}
+	// 	if (bomb2.getFrame() == 4) {
+	// 		boom = explode2;
+	// 		g.drawImage(boom,x2+100,y2,100,100,null);
+	// 		g.drawImage(boom,x2-100,y2,100,100,null);
+	// 		g.drawImage(boom,x2,y2+100,100,100,null);
+	// 		g.drawImage(boom,x2,y2-100,100,100,null);
+	// 	}
 		
-		boom = null;
-	}
+	// 	boom = null;
+	// }
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -145,7 +145,7 @@ public class GameCanvas extends JComponent {
 		bomb1.draw(g2d);
 		bomb2.draw(g2d);
 		
-		drawRange(g2d);
+		//drawRange(g2d);
 
 		for (Thing o : bombable){
 			o.draw(g2d);
@@ -209,6 +209,8 @@ public class GameCanvas extends JComponent {
 		for(Crate o : bombable){
 			o.setType(0);
 		}
+		bomb1.setFrame(5);
+		bomb2.setFrame(5);
 		
 	}
 }

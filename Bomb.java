@@ -85,30 +85,30 @@ public class Bomb implements Thing{
 			this.x+100 >= c.getX() + c.getWidth() || // from right side
 			this.y + this.height <= c.getY() || // from top side
 			this.y >= c.getY() + c.getHeight() ) { // from bottom side
-				return false;
+				return true;
 		} else if ( 
 			//  checks left explosion
 			this.x-100 + this.width <= c.getX() || // from left side
 			this.x-100 >= c.getX() + c.getWidth() || // from right side
 			this.y + this.height <= c.getY() || // from top side
 			this.y >= c.getY() + c.getHeight() ) { // from bottom side
-				return false;
+				return true;
 		} else if ( 
 			// checks top explosion
 			this.x + this.width <= c.getX() || // from left side
 			this.x >= c.getX() + c.getWidth() || // from right side
 			this.y-100 + this.height <= c.getY() || // from top side
 			this.y-100 >= c.getY() + c.getHeight() ) { // from bottom side
-				return false;
+				return true;
 		} else if ( 
 			// checks bottom explosion
 			this.x + this.width <= c.getX() || // from left side
 			this.x >= c.getX() + c.getWidth() || // from right side
 			this.y+100 + this.height <= c.getY() || // from top side
 			this.y+100 >= c.getY() + c.getHeight() ) {// from bottom side
-				return false;
-		} else {
 				return true;
+		} else {
+				return false;
 		}
 	}
 
@@ -133,18 +133,18 @@ public class Bomb implements Thing{
         }
         g.drawImage(image,x,y,width,height,null);
 		
-		// switch(frame) {
-			// case 4:
-			// boomB = explode2;
-			// break;
-			// default:
-			// boomB = null;
-			// break;
-		// }
-		// g.drawImage(boomB,x+100,y,width,height,null); //right
-		// g.drawImage(boomB,x-100,y,width,height,null); //left
-		// g.drawImage(boomB,x,y+100,width,height,null); //down
-		// g.drawImage(boomB,x,y-100,width,height,null); //up
+		switch(frame) {
+			case 4:
+			boomB = explode2;
+			break;
+			default:
+			boomB = null;
+			break;
+		}
+		g.drawImage(boomB,x+100,y,width,height,null); //right
+		g.drawImage(boomB,x-100,y,width,height,null); //left
+		g.drawImage(boomB,x,y+100,width,height,null); //down
+		g.drawImage(boomB,x,y-100,width,height,null); //up
 		
     }
 	

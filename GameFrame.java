@@ -177,14 +177,19 @@ public class GameFrame {
 										myBomb.addCounter();
 										gCanvas.repaint();
 										for (Crate r : bombable) {
+											System.out.println(check);
 											if ( myBomb.rangeCheck(r) ) {
 												r.setType(1);
 												gCanvas.repaint();
-												System.out.println("Ouch!");
-												if (check == 50) {
+												myBomb.addCounter();
+												if (check >= 50) {
 													gCanvas.removeCrate(r);
 													gCanvas.repaint();
+													myBomb.addCounter();
 												}
+												System.out.println("Ouch!");
+												break;
+												
 											}
 										}
 									} else if (check > 50 && check <= 80) {

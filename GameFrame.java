@@ -41,7 +41,7 @@ public class GameFrame {
 	public void setUpGUI() {
 		contentPane = frame.getContentPane();
 		createPlayers();
-		gCanvas.setScreen(true);\
+		gCanvas.setScreen(true);
 		contentPane.add(gCanvas, BorderLayout.CENTER);
 		
 		frame.setTitle("Fry-A-Chick!");

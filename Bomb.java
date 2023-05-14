@@ -92,33 +92,36 @@ public class Bomb implements Thing{
 	}
 	
 	public boolean rangeCheck(Crate c) {
-		if ( // checks right explosion
+		if (
+			// checks right explosion
 			this.x+100 + this.width <= c.getX() || // from left side
 			this.x+100 >= c.getX() + c.getWidth() || // from right side
 			this.y + this.height <= c.getY() || // from top side
-			this.y >= c.getY() + c.getHeight() || // from bottom side
-			
-			//checks left explosion
+			this.y >= c.getY() + c.getHeight() ) { // from bottom side
+				return false;
+		} else if ( 
+			//  checks left explosion
 			this.x-100 + this.width <= c.getX() || // from left side
 			this.x-100 >= c.getX() + c.getWidth() || // from right side
 			this.y + this.height <= c.getY() || // from top side
-			this.y >= c.getY() + c.getHeight() || // from bottom side
-			
-			//checks top explosion
+			this.y >= c.getY() + c.getHeight() ) { // from bottom side
+				return false;
+		} else if ( 
+			// checks top explosion
 			this.x + this.width <= c.getX() || // from left side
 			this.x >= c.getX() + c.getWidth() || // from right side
 			this.y-100 + this.height <= c.getY() || // from top side
-			this.y-100 >= c.getY() + c.getHeight() || // from bottom side
-			
-			//checks bottom explosion
+			this.y-100 >= c.getY() + c.getHeight() ) { // from bottom side
+				return false;
+		} else if ( 
+			// checks bottom explosion
 			this.x + this.width <= c.getX() || // from left side
 			this.x >= c.getX() + c.getWidth() || // from right side
 			this.y+100 + this.height <= c.getY() || // from top side
-			this.y+100 >= c.getY() + c.getHeight() // from bottom side
-		) {
-			return false;
+			this.y+100 >= c.getY() + c.getHeight() ) {// from bottom side
+				return false;
 		} else {
-			return true;
+				return true;
 		}
 	}
 

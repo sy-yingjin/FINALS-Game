@@ -10,8 +10,6 @@ public class Bomb implements Thing{
     public BufferedImage bomb1, bomb2, explode1, explode2;
     public BufferedImage image = null;
 	public BufferedImage boomB;
-	
-	private String mess;
 
     public Bomb(int x, int y){
         this.x = x;
@@ -21,7 +19,6 @@ public class Bomb implements Thing{
         bombImage();
         frame = 0;
 		counter = 0;
-		mess = "";
     }
 
     public void bombImage(){
@@ -87,7 +84,6 @@ public class Bomb implements Thing{
 			x < c.getX() + c.getWidth() && // from right side
 			y + height > c.getY() && // from top side
 			y < c.getY() + c.getHeight() ) { // from bottom side
-				mess = "Right";
 				return true;
 		}
 		
@@ -97,7 +93,6 @@ public class Bomb implements Thing{
 			x+100 < c.getX() + c.getWidth() && // from right side
 			y + height > c.getY() && // from top side
 			y < c.getY() + c.getHeight() ) { // from bottom side
-				mess = "Right";
 				return true;
 		}
 		
@@ -107,7 +102,6 @@ public class Bomb implements Thing{
 			x-100 < c.getX() + c.getWidth() && // from right side
 			y + height > c.getY() && // from top side
 			y < c.getY() + c.getHeight() ) { // from bottom side
-				mess = "Left";
 				return true;
 		}
 		
@@ -117,7 +111,6 @@ public class Bomb implements Thing{
 			x < c.getX() + c.getWidth() && // from right side
 			y-100 + height > c.getY() && // from top side
 			y-100 < c.getY() + c.getHeight() ) { // from bottom side
-				mess = "Top";
 				return true;
 		} 
 		
@@ -127,18 +120,12 @@ public class Bomb implements Thing{
 			x < c.getX() + c.getWidth() && // from right side
 			y+100 + height > c.getY() && // from top side
 			y+100 < c.getY() + c.getHeight() ) {// from bottom side
-				mess = "Down";
 				return true;
 		} else {
-				mess = "None";
 				return false;
 		}
 	}
 	
-	public String getMess() {
-		return mess;
-	}
-
     public void draw(Graphics2D g){
         switch(frame){
             //changes the image of the bomb shown
@@ -171,9 +158,6 @@ public class Bomb implements Thing{
 		g.drawImage(boomB,x+100,y,width,height,null); //right
 		g.drawImage(boomB,x-100,y,width,height,null); //left
 		g.drawImage(boomB,x,y+100,width,height,null); //down
-		g.drawImage(boomB,x,y-100,width,height,null); //up
-		
+		g.drawImage(boomB,x,y-100,width,height,null); //up	
     }
-	
-
 }

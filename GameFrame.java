@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.io.*;
 import java.net.*;
 
-
-
 public class GameFrame {
 	private Container contentPane;
 	private JFrame frame;
@@ -129,8 +127,7 @@ public class GameFrame {
 		};
 		contentPane.addKeyListener(kl);
 		contentPane.setFocusable(true);
-	}
-	
+	}	
 	
 	private void setUpAnimationTimer() {
 		int interval = 30;
@@ -225,78 +222,6 @@ public class GameFrame {
 							bombSet = false;	
 						}
 					}
-					
-					// if (rightFrame) {
-					// 	if ( bombable.size() != 0 ) {
-					// 		for (Crate item : bombable) {
-					// 			if (myBomb.getX()+100 + myBomb.getWidth() <= item.getX() || // from left side
-					// 				myBomb.getX()+100 >= item.getX()+100 || // from right side
-					// 				myBomb.getY()+ myBomb.getHeight() <= item.getY() || // from top side
-					// 				myBomb.getY() >= item.getY()+100 ) { // from bottom side
-												 		
-					// 				int index = bombable.indexOf(item);
-					// 				item.setType(1);
-					// 				gCanvas.repaint();
-					// 				myBomb.addCounter();
-														
-					// 				if ( nextFrame ) {
-					// 					gCanvas.removeCrate(index);
-					// 					gCanvas.repaint();
-					// 					System.out.println("Ouch!");
-					// 					break;
-					// 				}
-					// 			} else if (myBomb.getX()-100 + myBomb.getWidth() <= item.getX() || // from left side
-					// 				myBomb.getX()-100 >= item.getX()+100 || // from right side
-					// 				myBomb.getY()+ myBomb.getHeight() <= item.getY() || // from top side
-					// 				myBomb.getY() >= item.getY()+100 ) { // from bottom side
-												 		
-					// 				int index = bombable.indexOf(item);
-					// 				item.setType(1);
-					// 				gCanvas.repaint();
-					// 				myBomb.addCounter();
-														
-					// 				if ( nextFrame ) {
-					// 					gCanvas.removeCrate(index);
-					// 					gCanvas.repaint();
-					// 					System.out.println("Ouch!");
-					// 					break;
-					// 				}
-					// 			} else if (myBomb.getX() + myBomb.getWidth() <= item.getX() || // from left side
-					// 				myBomb.getX() >= item.getX()+100 || // from right side
-					// 				myBomb.getY()-100 + myBomb.getHeight() <= item.getY() || // from top side
-					// 				myBomb.getY()-100 >= item.getY()+100 ) { // from bottom side
-												 		
-					// 				int index = bombable.indexOf(item);
-					// 				item.setType(1);
-					// 				gCanvas.repaint();
-					// 				myBomb.addCounter();
-														
-					// 				if ( nextFrame ) {
-					// 					gCanvas.removeCrate(index);
-					// 					gCanvas.repaint();
-					// 					System.out.println("Ouch!");
-					// 					break;
-					// 				}
-					// 			} else if (myBomb.getX() + myBomb.getWidth() <= item.getX() || // from left side
-					// 				myBomb.getX() >= item.getX()+100 || // from right side
-					// 				myBomb.getY()+100 + myBomb.getHeight() <= item.getY() || // from top side
-					// 				myBomb.getY()+100 >= item.getY()+100 ) { // from bottom side
-												 		
-					// 				int index = bombable.indexOf(item);
-					// 				item.setType(1);
-					// 				gCanvas.repaint();
-					// 				myBomb.addCounter();
-														
-					// 				if ( nextFrame ) {
-					// 					gCanvas.removeCrate(index);
-					// 					gCanvas.repaint();
-					// 					System.out.println("Ouch!");
-					// 					break;
-					// 				}
-					// 			}
-					// 		}
-					// 	}
-					// }
 					
 					//border collision to the edge of the frame
 					if (me.getX() + me.getWidth() > width) { //if player is too right

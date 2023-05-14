@@ -77,39 +77,42 @@ public class Bomb implements Thing{
 		counter = 0;
 	}
 	
-	// public String rangeCheck(int x, int y) {
-		// if (
-			// // checks right explosion
-			// this.x+100 + this.width <= x || // from left side
-			// this.x+100 > x+100 || // from right side
-			// this.y + this.height <= y || // from top side
-			// this.y >= y+100 ) { // from bottom side
-				// return "right hit";
-		// } else if ( 
-			// //  checks left explosion
-			// this.x-100 + this.width <= x || // from left side
-			// this.x-100 >=  x+100  || // from right side
-			// this.y + this.height <= y || // from top side
-			// this.y >= y+100 ) { // from bottom side
-				// return "left hit";
-		// } else if ( 
-			// // checks top explosion
-			// this.x + this.width <= x || // from left side
-			// this.x >= x+100 || // from right side
-			// this.y-100 + this.height <= y || // from top side
-			// this.y-100 >= y+100 ) { // from bottom side
-				// return "top hit";
-		// } else if ( 
-			// // checks bottom explosion
-			// this.x + this.width <= x || // from left side
-			// this.x >= x+100 || // from right side
-			// this.y+100 + this.height <= y || // from top side
-			// this.y+100 >= y+100 ) {// from bottom side
-				// return "bottom hit";
-		// } else {
-				// return "no";
-		// }
-	// }
+	public boolean rangeCheck(Crate c) {
+		if (
+			// checks right explosion
+			this.x+100 + this.width < c.getX() || // from left side
+			this.x+100 > c.getX() + c.getWidth() || // from right side
+			this.y + this.height < c.getY() || // from top side
+			this.y > c.getY() + c.getHeight() ) { // from bottom side
+				return true;
+		} 
+        if ( 
+			//  checks left explosion
+			this.x-100 + this.width < c.getX() || // from left side
+			this.x-100 >= c.getX() + c.getWidth() || // from right side
+			this.y + this.height < c.getY() || // from top side
+			this.y > c.getY() + c.getHeight() ) { // from bottom side
+				return true;
+		} 
+        if ( 
+			// checks top explosion
+			this.x + this.width < c.getX() || // from left side
+			this.x > c.getX() + c.getWidth() || // from right side
+			this.y-100 + this.height < c.getY() || // from top side
+			this.y-100 > c.getY() + c.getHeight() ) { // from bottom side
+				return true;
+		} 
+        if ( 
+			// checks bottom explosion
+			this.x + this.width < c.getX() || // from left side
+			this.x > c.getX() + c.getWidth() || // from right side
+			this.y+100 + this.height < c.getY() || // from top side
+			this.y+100 > c.getY() + c.getHeight() ) {// from bottom side
+				return true;
+		} else {
+				return false;
+		}
+	}
 
     public void draw(Graphics2D g){
         switch(frame){

@@ -18,10 +18,10 @@ public class GameCanvas extends JComponent {
 	private Bomb bomb1, bomb2;
 	//title screen
 	private BufferedImage screen, title;
+    public BufferedImage explode2;
 	private boolean titleScreen;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Thing> unMovable;
-
 	
 	public GameCanvas(int w, int h) {
 		width = w;
@@ -67,17 +67,27 @@ public class GameCanvas extends JComponent {
 		unMovable.add(b2);
 		unMovable.add(b3);
 		unMovable.add(b4);
+		
+		explode2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/explode 2.png"));
 
 		getScreen();
+		getRange();
 		screen = title;
-
 		setPreferredSize(new Dimension(w, h));
+		
 	}
 	
 	public void getScreen(){
 		try{
             title = ImageIO.read(getClass().getResourceAsStream("/Sprites/Title Screen.jpg"));
-
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+	}
+	
+	public void getRange(){
+		try{
+            explode2 = ImageIO.read(getClass().getResourceAsStream("/Sprites/Title Screen.jpg"));
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -95,8 +105,27 @@ public class GameCanvas extends JComponent {
 		}
         g.drawImage(screen,0,0,width,height,null);
     }
-
-
+	
+	public void drawRange(Graphics2D g) {
+		int x1 = bomb1.getX();
+		int y1 = bomb1.getY();
+		int x2 = bomb2.getX();
+		int y2 = bomb2.getY();
+		
+		if (bomb1.getFrame() == 4) {
+			g.drawImage(explode2,x1+100,y1,100,100,null);
+			g.drawImage(explode2,x1-100,y1,100,100,null);
+			g.drawImage(explode2,x1,y1+100,100,100,null);
+			g.drawImage(explode2,x1,y1-100,100,100,null);
+		}
+			
+		if (bomb2.getFrame() == 4) {
+			g.drawImage(explode2,x2+100,y2,100,100,null);
+			g.drawImage(explode2,x2-100,y2,100,100,null);
+			g.drawImage(explode2,x2,y2+100,100,100,null);
+			g.drawImage(explode2,x2,y2-100,100,100,null);
+		}
+	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -112,6 +141,8 @@ public class GameCanvas extends JComponent {
 		
 		bomb1.draw(g2d);
 		bomb2.draw(g2d);
+		
+		drawRange(g2d);
 
 		for (Thing o : bombable){
 			o.draw(g2d);
@@ -124,10 +155,7 @@ public class GameCanvas extends JComponent {
 		drawScreen(g2d);
 	}
 
-	
-	
 	//returning playersprites and arraylist for it to be accessible in GameFrame
-	
 	public Player getUser() {
 		return chick;
 	}

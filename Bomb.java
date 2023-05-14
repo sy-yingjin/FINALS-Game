@@ -58,19 +58,6 @@ public class Bomb implements Thing{
         return width;
     }
 	
-	public boolean isColliding(Thing r) {
-		
-        if ( this.x + this.width <= r.getX() || // from left side
-			this.x >= r.getX() + r.getWidth() || // from right side
-			this.y + this.height <= r.getY() || // from top side
-			this.y >= r.getY() + r.getHeight() ) // from bottom side
-        {
-            return false;
-        } else {
-            return true;
-        }
-    }
-	
 	public void setFrame(int i) {
 		frame = i;
 	}
@@ -146,18 +133,18 @@ public class Bomb implements Thing{
         }
         g.drawImage(image,x,y,width,height,null);
 		
-		switch(frame) {
-			case 4:
-			boomB = explode2;
-			break;
-			default:
-			boomB = null;
-			break;
-		}
-		g.drawImage(boomB,x+100,y,width,height,null); //right
-		g.drawImage(boomB,x-100,y,width,height,null); //left
-		g.drawImage(boomB,x,y+100,width,height,null); //down
-		g.drawImage(boomB,x,y-100,width,height,null); //up
+		// switch(frame) {
+			// case 4:
+			// boomB = explode2;
+			// break;
+			// default:
+			// boomB = null;
+			// break;
+		// }
+		// g.drawImage(boomB,x+100,y,width,height,null); //right
+		// g.drawImage(boomB,x-100,y,width,height,null); //left
+		// g.drawImage(boomB,x,y+100,width,height,null); //down
+		// g.drawImage(boomB,x,y-100,width,height,null); //up
 		
     }
 	

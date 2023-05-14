@@ -77,39 +77,39 @@ public class Bomb implements Thing{
 		counter = 0;
 	}
 	
-	public String rangeCheck(int x, int y) {
-		if (
-			// checks right explosion
-			this.x+100 + this.width <= x || // from left side
-			this.x+100 > x+100 || // from right side
-			this.y + this.height <= y || // from top side
-			this.y >= y+100 ) { // from bottom side
-				return "right hit";
-		} else if ( 
-			//  checks left explosion
-			this.x-100 + this.width <= x || // from left side
-			this.x-100 >=  x+100  || // from right side
-			this.y + this.height <= y || // from top side
-			this.y >= y+100 ) { // from bottom side
-				return "left hit";
-		} else if ( 
-			// checks top explosion
-			this.x + this.width <= x || // from left side
-			this.x >= x+100 || // from right side
-			this.y-100 + this.height <= y || // from top side
-			this.y-100 >= y+100 ) { // from bottom side
-				return "top hit";
-		} else if ( 
-			// checks bottom explosion
-			this.x + this.width <= x || // from left side
-			this.x >= x+100 || // from right side
-			this.y+100 + this.height <= y || // from top side
-			this.y+100 >= y+100 ) {// from bottom side
-				return "bottom hit";
-		} else {
-				return "no";
-		}
-	}
+	// public String rangeCheck(int x, int y) {
+		// if (
+			// // checks right explosion
+			// this.x+100 + this.width <= x || // from left side
+			// this.x+100 > x+100 || // from right side
+			// this.y + this.height <= y || // from top side
+			// this.y >= y+100 ) { // from bottom side
+				// return "right hit";
+		// } else if ( 
+			// //  checks left explosion
+			// this.x-100 + this.width <= x || // from left side
+			// this.x-100 >=  x+100  || // from right side
+			// this.y + this.height <= y || // from top side
+			// this.y >= y+100 ) { // from bottom side
+				// return "left hit";
+		// } else if ( 
+			// // checks top explosion
+			// this.x + this.width <= x || // from left side
+			// this.x >= x+100 || // from right side
+			// this.y-100 + this.height <= y || // from top side
+			// this.y-100 >= y+100 ) { // from bottom side
+				// return "top hit";
+		// } else if ( 
+			// // checks bottom explosion
+			// this.x + this.width <= x || // from left side
+			// this.x >= x+100 || // from right side
+			// this.y+100 + this.height <= y || // from top side
+			// this.y+100 >= y+100 ) {// from bottom side
+				// return "bottom hit";
+		// } else {
+				// return "no";
+		// }
+	// }
 
     public void draw(Graphics2D g){
         switch(frame){

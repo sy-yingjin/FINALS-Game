@@ -89,10 +89,8 @@ public class GameCanvas extends JComponent {
 
 	public void drawScreen(Graphics2D g){
         if (titleScreen){
-			System.out.println("true na yung screen");
 			screen = title;
 		} else {
-			System.out.println("false na yung screen");
 			screen = null;
 		}
         g.drawImage(screen,0,0,width,height,null);
@@ -153,9 +151,26 @@ public class GameCanvas extends JComponent {
 	public Bomb getBomb2(){
 		return bomb2;
 	}
+	
+	public void removeCrate(Thing o) {
+		int item = bombable.indexOf(o);
+		bombable.remove(item);
+	}
+	
 
 	public void restart(){
 		titleScreen = true;
+		
+		bombable.add(0, c1);
+		bombable.add(1, c2);
+		bombable.add(2, c3);
+		bombable.add(3, c4);
+		bombable.add(4, c5);
+		bombable.add(5, c6);
+		bombable.add(6, c7);
+		bombable.add(7, c8);
+		bombable.add(8, c9);
+		
 		chick.setX(0);
 		chick.setY(0);
 		spicy.setX(400);
@@ -163,5 +178,6 @@ public class GameCanvas extends JComponent {
 		for(Crate o : bombable){
 			o.setType(0);
 		}
+		
 	}
 }

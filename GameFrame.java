@@ -41,17 +41,13 @@ public class GameFrame {
 	public void setUpGUI() {
 		contentPane = frame.getContentPane();
 		createPlayers();
-		gCanvas.setScreen(true);
-		/*Setting up the actual GUI was pretty fun when you know what you can mess with without messing up the program*/
-
+		gCanvas.setScreen(true);\
 		contentPane.add(gCanvas, BorderLayout.CENTER);
 		
 		frame.setTitle("Fry-A-Chick!");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);	
-
-		
 		setUpAnimationTimer();	
 		setUpKeyListener();
 	}
@@ -159,7 +155,6 @@ public class GameFrame {
 						gCanvas.repaint();
 						
 					} else if(space && bombCounter == false) { //create a bomb
-						
 						myBomb.setX(me.getX());
 						myBomb.setY(me.getY());
 						boolean bombSet = true;
@@ -181,6 +176,17 @@ public class GameFrame {
 										myBomb.setFrame(3);
 										myBomb.addCounter();
 										gCanvas.repaint();
+										for (Crate r : bombable) {
+											if ( myBomb.rangeCheck(r) ) {
+												r.setType(1);
+												gCanvas.repaint();
+												System.out.println("Ouch!");
+												if (check == 50) {
+													gCanvas.removeCrate(r);
+													gCanvas.repaint();
+												}
+											}
+										}
 									} else if (check > 50 && check <= 80) {
 										myBomb.setFrame(4);
 										myBomb.addCounter();
@@ -193,8 +199,7 @@ public class GameFrame {
 		
 									if (max){
 										timer.stop();
-										timer.setRepeats(false);
-										System.out.println("stop!");						
+										timer.setRepeats(false);					
 										myBomb.resetCounter();
 										max = false;
 										bombCounter = false;
@@ -206,7 +211,6 @@ public class GameFrame {
 							bombSet = false;
 							
 						}
-						System.out.println("boom");
 					}
 					
 					//border collision to the edge of the frame
@@ -288,20 +292,6 @@ public class GameFrame {
 						}
 					}
 					
-					//crate's animation and collision
-					int goneYet = myBomb.getFrame();
-					for (Crate o : bombable) {
-						if ( o.isColliding(myBomb) ) {
-							System.out.println("Ouch!");
-							o.setType(1);
-							gCanvas.repaint();
-							if (goneYet == 5) {
-								o.setType(2);
-								gCanvas.repaint();
-							}
-						}
-					}
-
 					if(restart){
 						gCanvas.restart();
 						start = false;

@@ -20,6 +20,7 @@ public class GameFrame extends JFrame {
 	private Bomb myBomb, enemyBomb;
 	private Timer timer, timerEnemy;
 	private int crateX, crateY, crateI;
+	private boolean drop;
 	
 	//for server
 	private Socket socket;
@@ -136,6 +137,7 @@ public class GameFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				if(start){
+					drop = false;
 					gCanvas.repaint();
 					if(up && !down && !left && !right) {
 						me.moveV(-speed);
@@ -160,6 +162,7 @@ public class GameFrame extends JFrame {
 						myBomb.setY(me.getY());
 						bombSet = true;
 						bombCounter = true;
+						drop = true;
 						
 						while(bombSet){
 							timer = new Timer(80, new ActionListener(){
@@ -184,6 +187,11 @@ public class GameFrame extends JFrame {
 											crateY = c.getY();
 											crateI = bombable.indexOf(c);
 										}
+										
+										if (check == 50)
+											drop = true;
+										else
+											drop = false;
 										
 										// for (Crate c : bombable) {
 										// 	if(myBomb.rangeCheck(c)){
@@ -217,7 +225,7 @@ public class GameFrame extends JFrame {
 									} else if (check > 50 && check <= 80) {
 										myBomb.setFrame(4);
 										myBomb.addCounter();
-										gCanvas.repaint();									
+										gCanvas.repaint();			
 									} else if (check > 80) {
 										myBomb.setFrame(5);
 										gCanvas.repaint();
@@ -425,7 +433,7 @@ public class GameFrame extends JFrame {
 						dataOut.writeInt(myBomb.getX());
 						dataOut.writeInt(myBomb.getY());
 						dataOut.writeInt(myBomb.getFrame());
-						dataOut.writeBoolean(space);
+						dataOut.writeBoolean(drop);
 						dataOut.writeInt(crateX);
 						dataOut.writeInt(crateY);
 						dataOut.writeInt(crateI);

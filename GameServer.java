@@ -135,47 +135,44 @@ public class GameServer {
 					if (b1b) {
 						if (
 								// checks middle explosion
-							b1x + 100 > crateX && // from left side
-							b1x < crateX + 100 && // from right side
-							b1y + 100 > crateY && // from top side
+							b1x + 100 > crateX || // from left side
+							b1x < crateX + 100 || // from right side
+							b1y + 100 > crateY || // from top side
 							b1y < crateY + 100 ) { // from bottom side
 							blown = true;
-						}
-							
-					if (
+							break;
+						} else if (
 								// checks right explosion
-							b1x+100 + 100 > crateX && // from left side
-							b1x+100 < crateX + 100 && // from right side
-							b1y + 100 > crateY && // from top side
+							b1x+100 + 100 > crateX || // from left side
+							b1x+100 < crateX + 100 || // from right side
+							b1y + 100 > crateY || // from top side
 							b1y < crateY + 100 ) { // from bottom side
 							blown = true;
-						}
-		
-					if ( 
+							break;
+						} else if ( 
 								//  checks left explosion
-							b1x-100 + 100 > crateX && // from left side
-							b1x-100 < crateX + 100 && // from right side
-							b1y + 100 > crateY && // from top side
+							b1x-100 + 100 > crateX || // from left side
+							b1x-100 < crateX + 100 || // from right side
+							b1y + 100 > crateY || // from top side
 							b1y < crateY + 100 ) { // from bottom side
 							blown = true;
-						}
-						
-					if ( 
+							break;
+						} else if ( 
 								//  checks top explosion
-							b1x + 100 > crateX && // from left side
-							b1x < crateX + 100 && // from right side
-							b1y-100 + 100 > crateY && // from top side
+							b1x + 100 > crateX || // from left side
+							b1x < crateX + 100 || // from right side
+							b1y-100 + 100 > crateY || // from top side
 							b1y-100 < crateY + 100 ) { // from bottom side
 							blown = true;
-						}
-						
-					if ( 
+							break;
+						} else if ( 
 								//  checks bottom explosion
-							b1x + 100 > crateX && // from left side
-							b1x < crateX + 100 && // from right side
-							b1y+100 + 100 > crateY && // from top side
+							b1x + 100 > crateX || // from left side
+							b1x < crateX + 100 || // from right side
+							b1y+100 + 100 > crateY || // from top side
 							b1y+100 < crateY + 100 ) { // from bottom side
 							blown = true;
+							break;
 						} else {
 							blown = false;
 						}
@@ -184,49 +181,51 @@ public class GameServer {
 					if (b2b) {
 						if (
 								// checks middle explosion
-							b2x + 100 > crateX && // from left side
-							b2x < crateX + 100 && // from right side
-							b2y + 100 > crateY && // from top side
-							b2y < crateY + 100 ) { // from bottom side
-							blown = true;
-						}
-							
-					if (
-								// checks right explosion
-							b2x+100 + 100 > crateX && // from left side
-							b2x+100 < crateX + 100 && // from right side
-							b2y + 100 > crateY && // from top side
-							b2y < crateY + 100 ) { // from bottom side
-							blown = true;
-						}
-		
-					if ( 
-								//  checks left explosion
-							b2x-100 + 100 > crateX && // from left side
-							b2x-100 < crateX + 100 && // from right side
-							b2y + 100 > crateY && // from top side
-							b2y < crateY + 100 ) { // from bottom side
-							blown = true;
-						}
-						
-					if ( 
-								//  checks top explosion
-							b2x + 100 > crateX && // from left side
-							b2x < crateX + 100 && // from right side
-							b2y-100 + 100 > crateY && // from top side
-							b2y-100 < crateY + 100 ) { // from bottom side
-							blown = true;
-						}
-						
-					if ( 
-								//  checks bottom explosion
-							b2x + 100 > crateX && // from left side
-							b2x < crateX + 100 && // from right side
-							b2y+100 + 100 > crateY && // from top side
-							b2y+100 < crateY + 100 ) { // from bottom side
-							blown = true;
-						} else {
+							b2x + 100 <= crateX || // from left side
+							b2x >= crateX + 100 || // from right side
+							b2y + 100 <= crateY || // from top side
+							b2y >= crateY + 100 ) { // from bottom side
 							blown = false;
+							System.out.println("Middle part hit");
+							break;
+						} else if (
+								// checks right explosion
+							b2x+100 + 100 <= crateX || // from left side
+							b2x+100 >= crateX + 100 || // from right side
+							b2y + 100 <= crateY || // from top side
+							b2y >= crateY + 100 ) { // from bottom side
+							blown = false;
+							System.out.println("Right part hit");
+							break;
+						} else if ( 
+								//  checks left explosion
+							b2x-100 + 100 <= crateX || // from left side
+							b2x-100 >= crateX + 100 || // from right side
+							b2y + 100 <= crateY || // from top side
+							b2y >= crateY + 100 ) { // from bottom side
+							blown = false;
+							System.out.println("Left part hit");
+							break;
+						} else if ( 
+								//  checks top explosion
+							b2x + 100 <= crateX || // from left side
+							b2x >= crateX + 100 || // from right side
+							b2y-100 + 100 <= crateY || // from top side
+							b2y-100 >= crateY + 100 ) { // from bottom side
+							blown = false;
+							System.out.println("Top part hit");
+							break;
+						} else if ( 
+								//  checks bottom explosion
+							b2x + 100 <= crateX || // from left side
+							b2x >= crateX + 100 || // from right side
+							b2y+100 + 100 <= crateY || // from top side
+							b2y+100 >= crateY + 100 ) { // from bottom side
+							blown = false;
+							break;
+						} else {
+							blown = true;
+							System.out.println("You missed bozo");
 						}
 					}
 

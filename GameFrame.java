@@ -10,17 +10,14 @@ public class GameFrame extends JFrame {
 	private GameCanvas gCanvas;
 	private Timer animationTimer;
 	private int speed, width, height, crateIndex;
-	private boolean up, down, left, right, space, start, restart;
+	private boolean up, down, left, right, space, start, restart, choice;
 	private boolean max, bombCounter, bombSet, gameOver;
-	private boolean explode, destroy1, destroy2;
 	private Player me, enemy;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Wall> unMovable;
 	private int playerID;
 	private Bomb myBomb, enemyBomb;
-	private Timer timer, timerEnemy;
-	private int crateX, crateY, crateI;
-	private boolean drop;
+	private Timer timer;
 	
 	//for server
 	private Socket socket;
@@ -32,7 +29,6 @@ public class GameFrame extends JFrame {
 		height = h;
 		gCanvas = new GameCanvas(w, h);
 		speed = 25;
-		crateIndex = 0;
 		bombable = gCanvas.getBombable();
 		unMovable = gCanvas.getUnmovable();
 	}
@@ -137,7 +133,6 @@ public class GameFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				if(start){
-					drop = false;
 					gCanvas.repaint();
 					if(up && !down && !left && !right) {
 						me.moveV(-speed);
@@ -162,7 +157,6 @@ public class GameFrame extends JFrame {
 						myBomb.setY(me.getY());
 						bombSet = true;
 						bombCounter = true;
-						drop = false;
 						
 						while(bombSet){
 							timer = new Timer(80, new ActionListener(){
@@ -181,33 +175,17 @@ public class GameFrame extends JFrame {
 										myBomb.setFrame(3);
 										myBomb.addCounter();
 										gCanvas.repaint();
-										
-										for (Crate c : bombable){
-											crateX = c.getX();
-											crateY = c.getY();
-											crateI = bombable.indexOf(c);
-										}
-										
-										if (check == 50)
-											drop = true;
-										else
-											drop = false;
-										
 										for (Crate c : bombable) {
 											if(myBomb.rangeCheck(c)){
 												c.setType(1);
-												explode = true;
 												gCanvas.repaint();
 												if (check == 50){
-												//gCanvas.removeCrate(crateIndex);
 												crateIndex = bombable.indexOf(c);
+												choice = true;
 												System.out.println("Index: " + crateIndex);
-													
 												gCanvas.removeCrate(crateIndex);
 												System.out.println("ArraySize = "+ bombable.size());
-													// explode = false;
-													// destroy1 = true;
-												gCanvas.repaint();			
+												gCanvas.repaint();	
 												}
 												break;
 											}
@@ -225,6 +203,7 @@ public class GameFrame extends JFrame {
 										
 									} else if (check > 50 && check <= 80) {
 										myBomb.setFrame(4);
+										choice = false;
 										myBomb.addCounter();
 										gCanvas.repaint();			
 									} else if (check > 80) {
@@ -299,7 +278,6 @@ public class GameFrame extends JFrame {
 					for ( Thing o : unMovable ) {
 						// checks for collision
 						// won't go through this if False
-						// will bug out if u press keys at the same time
 						if ( me.isColliding(o) ) {
 							if ( right ) {
 								// collision on left
@@ -333,7 +311,7 @@ public class GameFrame extends JFrame {
 						restart = false;
 						myBomb.setFrame(5);
 						bombCounter = false;
-						timer.stop();
+						//timer.stop();
 						timer.setRepeats(false);
 						bombable = gCanvas.getBombable();
 						gCanvas.repaint();
@@ -381,8 +359,6 @@ public class GameFrame extends JFrame {
 					int enBX = dataIn.readInt();
 					int enBY = dataIn.readInt();
 					int enBF = dataIn.readInt();
-					boolean collided = dataIn.readBoolean();
-					//int index = dataIn.readInt();
 					
 					if (enemy != null) {
 						enemy.setX(enX);
@@ -392,16 +368,17 @@ public class GameFrame extends JFrame {
 						enemyBomb.setFrame(enBF);
 					}
 					
-					crateIndex = dataIn.readInt();
-					while (!collided) {
-						System.out.println("hit!");
-						gCanvas.removeCrate(crateIndex);
+					boolean option = dataIn.readBoolean();
+					int index = dataIn.readInt();
+					
+					if (option) {
+						System.out.println("Index received.");
+						gCanvas.removeCrate(index);
 						gCanvas.repaint();
-						break;
-						
+						System.out.println(bombable.size());
 					}
 					
-					}
+				}
 					
 			} catch(IOException ex) {
 				System.out.println("IOException from RFS run()");
@@ -439,10 +416,7 @@ public class GameFrame extends JFrame {
 						dataOut.writeInt(myBomb.getX());
 						dataOut.writeInt(myBomb.getY());
 						dataOut.writeInt(myBomb.getFrame());
-						dataOut.writeBoolean(drop);
-						// dataOut.writeInt(crateX);
-						// dataOut.writeInt(crateY);
-						// dataOut.writeInt(crateI);
+						dataOut.writeBoolean(choice);
 						dataOut.writeInt(crateIndex);
 						dataOut.flush();
 					}

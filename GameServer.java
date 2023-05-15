@@ -22,10 +22,12 @@ public class GameServer {
 	
 	private int p1x, p1y, b1x, b1y, b1f;
 	private int p2x, p2y, b2x, b2y, b2f;
-	
-	private boolean b1b, b2b, blown;
 
-	private int crateX, crateY, crateI, c1, c2;
+	private boolean b1b, b2b;
+	
+	private int counter;
+
+	private int index1, index2;
 
 	
 	
@@ -44,8 +46,7 @@ public class GameServer {
 		b2x = 400;
 		b2y = 400;
 		
-		crateStatus = 0;
-		crateIndex = 0;
+		counter = 0;
 		
 		try {
 			ss = new ServerSocket(51234);
@@ -112,14 +113,15 @@ public class GameServer {
 		public void run() {
 			try {
 				while(true) {
-					if(playerID == 1) {
+					
+					if (playerID == 1) {
 						p1x = dataIn.readInt();
 						p1y = dataIn.readInt();
 						b1x = dataIn.readInt();
 						b1y = dataIn.readInt();
 						b1f = dataIn.readInt();
 						b1b = dataIn.readBoolean();
-						c1 = dataIn.readInt();
+						index1 = dataIn.readInt();
 					} else {
 						p2x = dataIn.readInt();
 						p2y = dataIn.readInt();
@@ -127,116 +129,8 @@ public class GameServer {
 						b2y = dataIn.readInt();
 						b2f = dataIn.readInt();
 						b2b = dataIn.readBoolean();
-						c2 = dataIn.readInt();
+						index2 = dataIn.readInt();
 					}
-					
-					
-					// crateX = dataIn.readInt();
-					// crateY = dataIn.readInt();
-					// crateI = dataIn.readInt();
-					blown = false;
-					//if (b1b) {
-					// 	System.out.print("im in");
-					// 	if (
-					// 			// checks middle explosion
-					// 		b1x + 100 > crateX || // from left side
-					// 		b1x < crateX + 100 || // from right side
-					// 		b1y + 100 > crateY || // from top side
-					// 		b1y < crateY + 100 ) { // from bottom side
-					// 		System.out.print("middle true");
-					// 		blown = true;
-					// 		break;
-					// 	} else if (
-					// 			// checks right explosion
-					// 		b1x+100 + 100 > crateX || // from left side
-					// 		b1x+100 < crateX + 100 || // from right side
-					// 		b1y + 100 > crateY || // from top side
-					// 		b1y < crateY + 100 ) { // from bottom side
-					// 		System.out.print("right true");
-					// 		blown = true;
-					// 		break;
-					// 	} else if ( 
-					// 			//  checks left explosion
-					// 		b1x-100 + 100 > crateX || // from left side
-					// 		b1x-100 < crateX + 100 || // from right side
-					// 		b1y + 100 > crateY || // from top side
-					// 		b1y < crateY + 100 ) { // from bottom side
-					// 		System.out.print("left true");
-					// 		blown = true;
-					// 		break;
-					// 	} else if ( 
-					// 			//  checks top explosion
-					// 		b1x + 100 > crateX || // from left side
-					// 		b1x < crateX + 100 || // from right side
-					// 		b1y-100 + 100 > crateY || // from top side
-					// 		b1y-100 < crateY + 100 ) { // from bottom side
-					// 		System.out.print("top true");
-					// 		//blown = true;
-					// 		break;
-					// 	} else if ( 
-					// 			//  checks bottom explosion
-					// 		b1x + 100 > crateX || // from left side
-					// 		b1x < crateX + 100 || // from right side
-					// 		b1y+100 + 100 > crateY || // from top side
-					// 		b1y+100 < crateY + 100 ) { // from bottom side
-					// 		//System.out.print("bottom true");
-					// 		//blown = true;
-					// 		break;
-					// 	} else {
-					// 		blown = true;
-					// 	}
-					// }
-					
-					// if (b2b) {
-					// 	if (
-					// 			// checks middle explosion
-					// 		b2x + 100 <= crateX || // from left side
-					// 		b2x >= crateX + 100 || // from right side
-					// 		b2y + 100 <= crateY || // from top side
-					// 		b2y >= crateY + 100 ) { // from bottom side
-					// 		blown = false;
-					// 		System.out.println("Middle part hit");
-					// 		break;
-					// 	} else if (
-					// 			// checks right explosion
-					// 		b2x+100 + 100 <= crateX || // from left side
-					// 		b2x+100 >= crateX + 100 || // from right side
-					// 		b2y + 100 <= crateY || // from top side
-					// 		b2y >= crateY + 100 ) { // from bottom side
-					// 		blown = false;
-					// 		System.out.println("Right part hit");
-					// 		break;
-					// 	} else if ( 
-					// 			//  checks left explosion
-					// 		b2x-100 + 100 <= crateX || // from left side
-					// 		b2x-100 >= crateX + 100 || // from right side
-					// 		b2y + 100 <= crateY || // from top side
-					// 		b2y >= crateY + 100 ) { // from bottom side
-					// 		blown = false;
-					// 		System.out.println("Left part hit");
-					// 		break;
-					// 	} else if ( 
-					// 			//  checks top explosion
-					// 		b2x + 100 <= crateX || // from left side
-					// 		b2x >= crateX + 100 || // from right side
-					// 		b2y-100 + 100 <= crateY || // from top side
-					// 		b2y-100 >= crateY + 100 ) { // from bottom side
-					// 		blown = false;
-					// 		System.out.println("Top part hit");
-					// 		break;
-					// 	} else if ( 
-					// 			//  checks bottom explosion
-					// 		b2x + 100 <= crateX || // from left side
-					// 		b2x >= crateX + 100 || // from right side
-					// 		b2y+100 + 100 <= crateY || // from top side
-					// 		b2y+100 >= crateY + 100 ) { // from bottom side
-					// 		blown = false;
-					// 		break;
-					// 	} else {
-					// 		blown = true;
-					// 		System.out.println("You missed bozo");
-					// 	}
-					// }
 
 				}
 			} catch(IOException ex) {
@@ -258,31 +152,32 @@ public class GameServer {
 		public void run() {
 			try {
 				while(true) {
+					
 					if(playerID == 1) {
 						dataOut.writeInt(p2x);
 						dataOut.writeInt(p2y);
 						dataOut.writeInt(b2x);
 						dataOut.writeInt(b2y);
 						dataOut.writeInt(b2f);
-						dataOut.writeBoolean(blown);
-						dataOut.writeInt(c2);
-						System.out.println(c2);
+						dataOut.writeBoolean(b2b);
+						dataOut.writeInt(index2);
 					} else {
 						dataOut.writeInt(p1x);
 						dataOut.writeInt(p1y);
 						dataOut.writeInt(b1x);
 						dataOut.writeInt(b1y);
 						dataOut.writeInt(b1f);
-						dataOut.writeBoolean(blown);
-						dataOut.writeInt(c1);
-						System.out.println(c1);
-
+						dataOut.writeBoolean(b1b);
+						dataOut.writeInt(index1);
 					}
-					
-					// dataOut.writeBoolean(blown);
-					// dataOut.writeInt(crateI);
-					// System.out.println(crateI);
 					dataOut.flush();
+					
+					counter ++;
+					
+					if (counter >= 1) {
+						b1b = false;
+						b2b = false;
+					}
 				
 					try {
 						Thread.sleep(20);

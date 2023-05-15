@@ -167,6 +167,7 @@ public class GameCanvas extends JComponent {
 		chick.setY(0);
 		spicy.setX(400);
 		spicy.setY(400);
+		
 		for(Crate o : bombable){
 			o.setType(0);
 		}

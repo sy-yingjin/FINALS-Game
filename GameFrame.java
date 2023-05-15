@@ -10,7 +10,8 @@ public class GameFrame extends JFrame {
 	private GameCanvas gCanvas;
 	private Timer animationTimer;
 	private int speed, width, height, crateIndex;
-	private boolean up, down, left, right, space, start, restart, max, bombCounter, bombSet, explode, destroy;
+	private boolean up, down, left, right, space, start, restart, max, bombCounter, bombSet;
+	private boolean explode, destroy1, destroy2;
 	private Player me, enemy;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Wall> unMovable;
@@ -178,17 +179,16 @@ public class GameFrame extends JFrame {
 										
 										for (Crate c : bombable) {
 											if(myBomb.rangeCheck(c)){
-												//c.setType(1);
+												c.setType(1);
 												explode = true;
-												crateIndex = bombable.indexOf(c);
 												gCanvas.repaint();
-												myBomb.addCounter();
-												if (check >= 50){
-													myBomb.addCounter();
-													System.out.println(bombable.size());
-													destroy = true;
-													//gCanvas.removeCrate(bombable.indexOf(c));
+												if (check == 50){
+												crateIndex = bombable.indexOf(c);
+												System.out.println("Index: " + crateIndex);
+													System.out.println("ArraySize = "+ bombable.size());
+													gCanvas.removeCrate(bombable.indexOf(c));
 													explode = false;
+													destroy1 = true;
 													gCanvas.repaint();			
 												}
 												break;
@@ -203,7 +203,7 @@ public class GameFrame extends JFrame {
 									} else if (check > 50 && check <= 80) {
 										myBomb.setFrame(4);
 										myBomb.addCounter();
-										destroy = false;
+										destroy1 = false;
 										gCanvas.repaint();									
 									} else if (check > 80) {
 										myBomb.setFrame(5);
@@ -360,7 +360,7 @@ public class GameFrame extends JFrame {
 					int enemyBY = dataIn.readInt();
 					int index = dataIn.readInt();
 					int status = dataIn.readInt();
-					boolean boot = dataIn.readBoolean();
+					destroy2 = dataIn.readBoolean();
  					if (enemy != null) {
 						enemy.setX(enemyX);
 						enemy.setY(enemyY);
@@ -371,9 +371,9 @@ public class GameFrame extends JFrame {
 					Crate select = bombable.get(index);
 					select.setType(status);
 					
-					if (boot)
+					if (destroy2)
 						gCanvas.removeCrate(index);
-					gCanvas.repaint();			
+					//gCanvas.repaint();			
 					
 				}
 			} catch(IOException ex) {
@@ -412,7 +412,7 @@ public class GameFrame extends JFrame {
 						dataOut.writeInt(myBomb.getX());
 						dataOut.writeInt(myBomb.getY());
 						dataOut.writeBoolean(explode);
-						dataOut.writeBoolean(destroy);
+						dataOut.writeBoolean(destroy1);
 						dataOut.writeInt(crateIndex);
 						dataOut.flush();
 					}

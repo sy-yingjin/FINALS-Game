@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Player implements Thing{
-    private int x, y, width, height, HP, counter, spriteNum, spriteCount;
+    private int x, y, width, height, counter, spriteNum, spriteCount;
     public BufferedImage chick1, chick2, spicy1, spicy2;
     public BufferedImage image = null;
     
@@ -14,7 +14,6 @@ public class Player implements Thing{
         this.y = y;
         width = 100;
         height = 100;
-        HP = 1;
         counter = i;
         playerImage();
         spriteNum = 1;
@@ -64,11 +63,6 @@ public class Player implements Thing{
 
     public int getWidth(){
         return width;
-    }
-
-    public void getHit(int h){
-        HP -= h;
-
     }
 
     public void spriteChange(){

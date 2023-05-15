@@ -16,6 +16,7 @@ public class GameServer {
 	private WriteToClient p2WriteRunnable;
 	
 	private int p1x, p1y, p2x, p2y;
+	private int b1x, b1y, b2x, b2y;
 	
 	
 	public GameServer() {
@@ -27,6 +28,11 @@ public class GameServer {
 		p1y = 0;
 		p2x = 400;
 		p2y = 400;
+		
+		b1x = 0;
+		b1y = 0;
+		b2x = 400;
+		b2y = 400;
 		
 		try {
 			ss = new ServerSocket(51234);
@@ -96,9 +102,13 @@ public class GameServer {
 					if(playerID == 1) {
 						p1x = dataIn.readInt();
 						p1y = dataIn.readInt();
+						b1x = dataIn.readInt();
+						b1y = dataIn.readInt();
 					} else {
 						p2x = dataIn.readInt();
 						p2y = dataIn.readInt();
+						b2x = dataIn.readInt();
+						b2y = dataIn.readInt();
 					}
 				}
 			} catch(IOException ex) {
@@ -123,14 +133,18 @@ public class GameServer {
 					if(playerID == 1) {
 						dataOut.writeInt(p2x);
 						dataOut.writeInt(p2y);
+						dataOut.writeInt(b2x);
+						dataOut.writeInt(b2y);
 						dataOut.flush();
 					} else {
 						dataOut.writeInt(p1x);
 						dataOut.writeInt(p1y);
+						dataOut.writeInt(b1x);
+						dataOut.writeInt(b1y);
 						dataOut.flush();
 					}
 					try {
-						Thread.sleep(25);
+						Thread.sleep(20);
 					} catch(InterruptedException ex) {
 						System.out.println("InterruptedException from WTC run()");
 					}
@@ -144,7 +158,7 @@ public class GameServer {
 			try {
 				dataOut.writeUTF("We now have 2 players, Go!");
 			} catch(IOException ex) {
-				System.out.println("IOException from WTC run()");
+				System.out.println("IOException from sendStartMsg()");
 			}
 		}
 	}

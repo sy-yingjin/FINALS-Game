@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.io.*;
 import java.net.*;
 
-public class GameFrame {
+public class GameFrame extends JFrame {
 	private Container contentPane;
-	private JFrame frame;
 	private GameCanvas gCanvas;
 	private Timer animationTimer;
 	private int speed, width, height, index;
@@ -31,7 +30,6 @@ public class GameFrame {
 	public GameFrame(int w, int h) {
 		width = w;
 		height = h;
-		frame = new JFrame();
 		gCanvas = new GameCanvas(w, h);
 		speed = 25;
 		
@@ -40,15 +38,17 @@ public class GameFrame {
 	}
 	
 	public void setUpGUI() {
-		contentPane = frame.getContentPane();
+		contentPane = this.getContentPane();
+		contentPane.setPreferredSize(new Dimension(width,height));
 		createPlayers();
 		gCanvas.setScreen(true);
 		contentPane.add(gCanvas, BorderLayout.CENTER);
 		
-		frame.setTitle("Fry-A-Chick!");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);	
+		this.setTitle("Fry-A-Chick! Player#" + playerID);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.pack();
+		this.setVisible(true);	
+		
 		setUpAnimationTimer();	
 		setUpKeyListener();
 	}
@@ -184,10 +184,7 @@ public class GameFrame {
 												c.setType(1);
 												gCanvas.repaint();
 												myBomb.addCounter();
-												System.out.println(check);
 												if (check >= 50){
-													System.out.print("in");
-													System.out.println(check);
 													myBomb.addCounter();
 													System.out.println(bombable.size());
 													gCanvas.removeCrate(bombable.indexOf(c));
@@ -196,6 +193,12 @@ public class GameFrame {
 												break;
 											}
 										}
+										
+										if (myBomb.rangeCheck(enemy)) {
+											
+											gCanvas.repaint();
+										}
+										
 									} else if (check > 50 && check <= 80) {
 										myBomb.setFrame(4);
 										myBomb.addCounter();
@@ -329,7 +332,7 @@ public class GameFrame {
  			System.out.println("You are player #" + playerID);
  			if(playerID == 1) {
  				System.out.println("Waiting for Player #2 to connect. . .");
-		}
+			}
  			rfsRunnable = new ReadFromServer(in);
  			wtsRunnable = new WriteToServer(out);
  			rfsRunnable.waitForStartMsg();
@@ -351,9 +354,13 @@ public class GameFrame {
 				while(true) {
 					int enemyX = dataIn.readInt();
 					int enemyY = dataIn.readInt();
+					int enemyBX = dataIn.readInt();
+					int enemyBY = dataIn.readInt();
  					if (enemy != null) {
 						enemy.setX(enemyX);
 						enemy.setY(enemyY);
+						enemyBomb.setX(enemyBX);
+						enemyBomb.setY(enemyBY);
 					}
 				}
 			} catch(IOException ex) {
@@ -386,15 +393,16 @@ public class GameFrame {
 		public void run() {
 			try {
 				while(true) {
-					if (me != null)  {
-						
-						dataOut.writeDouble(me.getX());
-						dataOut.writeDouble(me.getY());
+					if (me != null) {
+						dataOut.writeInt(me.getX());
+						dataOut.writeInt(me.getY());
+						dataOut.writeInt(myBomb.getX());
+						dataOut.writeInt(myBomb.getX());
 						dataOut.flush();
 					}
 					
 					try {
-						Thread.sleep(25);
+						Thread.sleep(20);
 					} catch(InterruptedException ex) {
 						System.out.println("InterruptedException from WTS run()");
 					}

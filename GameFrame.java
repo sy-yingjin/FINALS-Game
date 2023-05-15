@@ -19,9 +19,6 @@ public class GameFrame extends JFrame {
 	private Bomb myBomb, enemyBomb;
 	private Timer timer;
 	
-	private boolean rightFrame;
-	private boolean nextFrame;
-
 	//for server
 	private Socket socket;
 	private ReadFromServer rfsRunnable;
@@ -178,10 +175,10 @@ public class GameFrame extends JFrame {
 										myBomb.setFrame(3);
 										myBomb.addCounter();
 										gCanvas.repaint();
-										//rightFrame = true;
+										
 										for (Crate c : bombable) {
 											if(myBomb.rangeCheck(c)){
-												c.setType(1);
+												//c.setType(1);
 												explode = true;
 												crateIndex = bombable.indexOf(c);
 												gCanvas.repaint();
@@ -190,7 +187,8 @@ public class GameFrame extends JFrame {
 													myBomb.addCounter();
 													System.out.println(bombable.size());
 													destroy = true;
-													gCanvas.removeCrate(bombable.indexOf(c));
+													//gCanvas.removeCrate(bombable.indexOf(c));
+													explode = false;
 													gCanvas.repaint();			
 												}
 												break;
@@ -205,6 +203,7 @@ public class GameFrame extends JFrame {
 									} else if (check > 50 && check <= 80) {
 										myBomb.setFrame(4);
 										myBomb.addCounter();
+										destroy = false;
 										gCanvas.repaint();									
 									} else if (check > 80) {
 										myBomb.setFrame(5);
@@ -359,12 +358,23 @@ public class GameFrame extends JFrame {
 					int enemyY = dataIn.readInt();
 					int enemyBX = dataIn.readInt();
 					int enemyBY = dataIn.readInt();
+					int index = dataIn.readInt();
+					int status = dataIn.readInt();
+					boolean boot = dataIn.readBoolean();
  					if (enemy != null) {
 						enemy.setX(enemyX);
 						enemy.setY(enemyY);
 						enemyBomb.setX(enemyBX);
 						enemyBomb.setY(enemyBY);
 					}
+					
+					Crate select = bombable.get(index);
+					select.setType(status);
+					
+					if (boot)
+						gCanvas.removeCrate(index);
+					gCanvas.repaint();			
+					
 				}
 			} catch(IOException ex) {
 				System.out.println("IOException from RFS run()");
@@ -400,8 +410,9 @@ public class GameFrame extends JFrame {
 						dataOut.writeInt(me.getX());
 						dataOut.writeInt(me.getY());
 						dataOut.writeInt(myBomb.getX());
-						dataOut.writeInt(myBomb.getX());
+						dataOut.writeInt(myBomb.getY());
 						dataOut.writeBoolean(explode);
+						dataOut.writeBoolean(destroy);
 						dataOut.writeInt(crateIndex);
 						dataOut.flush();
 					}

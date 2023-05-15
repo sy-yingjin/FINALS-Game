@@ -52,6 +52,10 @@ public class Crate implements Thing{
 	public void setType(int i) {
 		type = i;
 	}
+	
+	public int getType() {
+		return type;
+	}
 
     public int getHeight(){
         return height;

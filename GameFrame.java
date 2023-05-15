@@ -9,14 +9,13 @@ public class GameFrame extends JFrame {
 	private Container contentPane;
 	private GameCanvas gCanvas;
 	private Timer animationTimer;
-	private int speed, width, height, crateIndex, status, index;
+	private int speed, width, height, crateIndex;
 	private boolean up, down, left, right, space, start, restart;
-	private boolean max, maxEnemy, bombCounter, bombCounterEnemy, bombSet, bombSetEnemy, gameOver;
+	private boolean max, bombCounter, bombSet, gameOver;
 	private boolean explode, destroy1, destroy2;
 	private Player me, enemy;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Wall> unMovable;
-	private ArrayList<Bomb> bombs;
 	private int playerID;
 	private Bomb myBomb, enemyBomb;
 	private Timer timer, timerEnemy;
@@ -127,6 +126,7 @@ public class GameFrame extends JFrame {
 		};
 		contentPane.addKeyListener(kl);
 		contentPane.setFocusable(true);
+		
 	}	
 	
 	private void setUpAnimationTimer() {
@@ -160,11 +160,7 @@ public class GameFrame extends JFrame {
 						myBomb.setY(me.getY());
 						bombSet = true;
 						bombCounter = true;
-						for (Crate c : bombable){
-							crateX = c.getX();
-							crateY = c.getY();
-							crateI = bombable.indexOf(c);
-						}
+						
 						while(bombSet){
 							timer = new Timer(80, new ActionListener(){
 								@Override
@@ -182,6 +178,12 @@ public class GameFrame extends JFrame {
 										myBomb.setFrame(3);
 										myBomb.addCounter();
 										gCanvas.repaint();
+										
+										for (Crate c : bombable){
+											crateX = c.getX();
+											crateY = c.getY();
+											crateI = bombable.indexOf(c);
+										}
 										
 										// for (Crate c : bombable) {
 										// 	if(myBomb.rangeCheck(c)){
@@ -215,7 +217,6 @@ public class GameFrame extends JFrame {
 									} else if (check > 50 && check <= 80) {
 										myBomb.setFrame(4);
 										myBomb.addCounter();
-										destroy1 = false;
 										gCanvas.repaint();									
 									} else if (check > 80) {
 										myBomb.setFrame(5);
@@ -366,6 +367,26 @@ public class GameFrame extends JFrame {
 		public void run() {
 			try {
 				while(!gameOver) {
+					int enX = dataIn.readInt();
+					int enY = dataIn.readInt();
+					int enBX = dataIn.readInt();
+					int enBY = dataIn.readInt();
+					int enBF = dataIn.readInt();
+					boolean collided = dataIn.readBoolean();
+					int index = dataIn.readInt();
+					
+					if (enemy != null) {
+						enemy.setX(enX);
+						enemy.setY(enY);
+						enemyBomb.setX(enBX);
+						enemyBomb.setY(enBY);
+						enemyBomb.setFrame(enBF);
+					}
+					
+					if (collided) {
+						gCanvas.removeCrate(index);
+						gCanvas.repaint();
+					}
 					
 					}
 			} catch(IOException ex) {
@@ -399,8 +420,16 @@ public class GameFrame extends JFrame {
 			try {
 				while(!gameOver) {
 					if (me != null) {
-
-
+						dataOut.writeInt(me.getX());
+						dataOut.writeInt(me.getY());
+						dataOut.writeInt(myBomb.getX());
+						dataOut.writeInt(myBomb.getY());
+						dataOut.writeInt(myBomb.getFrame());
+						dataOut.writeBoolean(space);
+						dataOut.writeInt(crateX);
+						dataOut.writeInt(crateY);
+						dataOut.writeInt(crateI);
+						dataOut.flush();
 					}
 					
 					try {

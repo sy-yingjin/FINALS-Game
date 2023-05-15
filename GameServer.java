@@ -18,10 +18,13 @@ public class GameServer {
 	
 	private int crateStatus;
 	private int crateIndex;
-	private boolean explode, destroy;
+	private boolean explode, destroy, bombSet1, bombSet2;
 	
 	private int p1x, p1y, p2x, p2y;
 	private int b1x, b1y, b2x, b2y;
+
+	private int crateX, crateY, crateI;
+
 	
 	
 	public GameServer() {
@@ -108,22 +111,10 @@ public class GameServer {
 			try {
 				while(true) {
 					if(playerID == 1) {
-						p1x = dataIn.readInt();
-						p1y = dataIn.readInt();
-						b1x = dataIn.readInt();
-						b1y = dataIn.readInt();
+						
 					} else {
-						p2x = dataIn.readInt();
-						p2y = dataIn.readInt();
-						b2x = dataIn.readInt();
-						b2y = dataIn.readInt();
+
 					}
-					explode = dataIn.readBoolean();
-					destroy = dataIn.readBoolean();
-					crateIndex = dataIn.readInt();
-					
-					if(explode)
-						crateStatus = 1;
 
 				}
 			} catch(IOException ex) {
@@ -146,21 +137,10 @@ public class GameServer {
 			try {
 				while(true) {
 					if(playerID == 1) {
-						dataOut.writeInt(p2x);
-						dataOut.writeInt(p2y);
-						dataOut.writeInt(b2x);
-						dataOut.writeInt(b2y);
+
 					} else {
-						dataOut.writeInt(p1x);
-						dataOut.writeInt(p1y);
-						dataOut.writeInt(b1x);
-						dataOut.writeInt(b1y);
+
 					}
-					
-					dataOut.writeInt(crateIndex);
-					dataOut.writeInt(crateStatus);
-					dataOut.writeBoolean(destroy);
-					dataOut.flush();
 				
 					try {
 						Thread.sleep(20);

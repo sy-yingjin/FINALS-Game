@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
@@ -17,8 +19,8 @@ public class GameCanvas extends JComponent {
 	private Wall b1, b2, b3, b4;
 	private Bomb bomb1, bomb2;
 	//title screen
-	private BufferedImage screen, title;
-	private boolean titleScreen;
+	private BufferedImage screen, title, chickWin, spicyWin;
+	private int titleScreen;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Thing> unMovable;
 	
@@ -75,23 +77,36 @@ public class GameCanvas extends JComponent {
 	public void getScreen(){
 		try{
             title = ImageIO.read(getClass().getResourceAsStream("/Sprites/Title Screen.jpg"));
+			chickWin = ImageIO.read(getClass().getResourceAsStream("/Sprites/chick win.jpg"));
+			spicyWin = ImageIO.read(getClass().getResourceAsStream("/Sprites/spicy win.jpg"));
         }catch(IOException e){
             e.printStackTrace();
         }
 	}
 
-	public void setScreen(boolean s){
+	public void setScreen(int s){
 		titleScreen = s;
 	}
 
 	public void drawScreen(Graphics2D g){
-        if (titleScreen){
+       
+		switch(titleScreen){
+			case 1:
 			screen = title;
-		} else {
+			break;
+			case 2:
+			screen = chickWin;
+			break;
+			case 3:
+			screen = spicyWin;
+			break;
+			default:
 			screen = null;
-		}
+			break;
+		}	
         g.drawImage(screen,0,0,width,height,null);
     }
+	
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -149,7 +164,7 @@ public class GameCanvas extends JComponent {
 	
 
 	public void restart(){
-		titleScreen = true;
+		titleScreen = 1;
 		bomb1.setFrame(5);
 		bomb2.setFrame(5);
 

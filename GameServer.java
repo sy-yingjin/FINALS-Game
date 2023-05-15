@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class GameServer {
 	private ServerSocket ss;
@@ -15,8 +16,12 @@ public class GameServer {
 	private WriteToClient p1WriteRunnable;
 	private WriteToClient p2WriteRunnable;
 	
+	private ArrayList<Integer> crateStatus;
+	private boolean explode, destroy;
+	
 	private int p1x, p1y, p2x, p2y;
 	private int b1x, b1y, b2x, b2y;
+	private int crateIndex;
 	
 	
 	public GameServer() {
@@ -33,6 +38,11 @@ public class GameServer {
 		b1y = 0;
 		b2x = 400;
 		b2y = 400;
+		crateStatus = new ArrayList<>();
+		for (int i=0; i<9; i++){
+			crateStatus.add(0);
+		}
+
 		
 		try {
 			ss = new ServerSocket(51234);
@@ -110,6 +120,12 @@ public class GameServer {
 						b2x = dataIn.readInt();
 						b2y = dataIn.readInt();
 					}
+					explode = dataIn.readBoolean();
+					crateIndex =  dataIn.readInt();
+					if(explode){
+						crateStatus.set(crateIndex, 1);
+					} 
+
 				}
 			} catch(IOException ex) {
 				System.out.println("IOException from RFC run()");
@@ -143,6 +159,8 @@ public class GameServer {
 						dataOut.writeInt(b1y);
 						dataOut.flush();
 					}
+				
+					
 					try {
 						Thread.sleep(20);
 					} catch(InterruptedException ex) {

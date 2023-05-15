@@ -9,8 +9,8 @@ public class GameFrame extends JFrame {
 	private Container contentPane;
 	private GameCanvas gCanvas;
 	private Timer animationTimer;
-	private int speed, width, height, index;
-	private boolean up, down, left, right, space, start, restart, max, bombCounter, bombSet;
+	private int speed, width, height, crateIndex;
+	private boolean up, down, left, right, space, start, restart, max, bombCounter, bombSet, explode, destroy;
 	private Player me, enemy;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Wall> unMovable;
@@ -68,7 +68,7 @@ public class GameFrame extends JFrame {
 			myBomb = gCanvas.getBomb2();
 		}	
 	}
-	
+
 	private void setUpKeyListener() {
 		KeyListener kl = new KeyListener() {
 			public void keyTyped(KeyEvent ke) {
@@ -182,11 +182,14 @@ public class GameFrame extends JFrame {
 										for (Crate c : bombable) {
 											if(myBomb.rangeCheck(c)){
 												c.setType(1);
+												explode = true;
+												crateIndex = bombable.indexOf(c);
 												gCanvas.repaint();
 												myBomb.addCounter();
 												if (check >= 50){
 													myBomb.addCounter();
 													System.out.println(bombable.size());
+													destroy = true;
 													gCanvas.removeCrate(bombable.indexOf(c));
 													gCanvas.repaint();			
 												}
@@ -398,6 +401,8 @@ public class GameFrame extends JFrame {
 						dataOut.writeInt(me.getY());
 						dataOut.writeInt(myBomb.getX());
 						dataOut.writeInt(myBomb.getX());
+						dataOut.writeBoolean(explode);
+						dataOut.writeInt(crateIndex);
 						dataOut.flush();
 					}
 					

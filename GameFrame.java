@@ -49,8 +49,7 @@ public class GameFrame extends JFrame {
 	private Socket socket;
 	private ReadFromServer rfsRunnable;
 	private WriteToServer wtsRunnable;
-	private int port;
-	private String ipAddress;
+	private String ip;
  
 
 	public GameFrame(int w, int h) {
@@ -62,6 +61,9 @@ public class GameFrame extends JFrame {
 		unMovable = gCanvas.getUnmovable();
 		first1 = true;
 		first2 = true;
+		Scanner console = new Scanner(System.in);
+        System.out.print("IP Address: ");
+        ip = console.nextLine();
 	}
 	
 	public void setUpGUI() {
@@ -72,10 +74,6 @@ public class GameFrame extends JFrame {
 		contentPane.add(gCanvas, BorderLayout.CENTER);
 		
 		this.setTitle("Fry-A-Chick! Player#" + playerID);
-		System.out.print("IP Address: ");
-		ipAddress = console.nextLine();
-		System.out.print("Port Number: ");
-		port = Integer.parseInt(console.nextLine());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);	
@@ -391,7 +389,7 @@ public class GameFrame extends JFrame {
 	//connects a player to the gameserver
 	public void connectToServer() {
 		try {
- 			socket = new Socket(ipAddress, port);
+ 			socket = new Socket(ip, 51234);
  			DataInputStream in = new DataInputStream(socket.getInputStream());
  			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			

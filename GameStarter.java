@@ -18,11 +18,16 @@ of my program.
 /** This program starts the game. It is a bomberman inspired game where two kinds of chickens try to fry each other with bombs.
 *This is a two-player game.
 */
+
+//import java.util.Scanner;
+
 public class GameStarter {
 	
 	public static void main(String[] args) {
+		
 		GameFrame gFrame = new GameFrame(500, 500);
 		gFrame.connectToServer();
 		gFrame.setUpGUI();
+
 	}
 }

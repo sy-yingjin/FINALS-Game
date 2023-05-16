@@ -24,10 +24,7 @@ public class GameServer {
 	private int p2x, p2y, b2x, b2y, b2f;
 
 	private boolean b1b, b2b;
-	
-	private int counter;
-
-	private int index1, index2;
+	private int counter, index1, index2;
 
 	
 	
@@ -131,8 +128,6 @@ public class GameServer {
 						b2b = dataIn.readBoolean();
 						index2 = dataIn.readInt();
 					}
-					
-
 				}
 			} catch(IOException ex) {
 				System.out.println("IOException from RFC run()");

@@ -20,7 +20,6 @@ public class GameFrame extends JFrame {
 	private Timer timer;
 	private boolean first1, first2;
 	private int oldIndex1, newIndex1, oldIndex2, newIndex2;
-	private ReentrantLock mutex = new ReentrantLock();
 	//for server
 	private Socket socket;
 	private ReadFromServer rfsRunnable;
@@ -196,17 +195,6 @@ public class GameFrame extends JFrame {
 											}
 										}
 										
-										if (myBomb.rangeCheck(gCanvas.getUser())) {
-											
-											gameOver = true; 
-											gCanvas.setScreen(3);
-											gCanvas.repaint();
-										} else if (myBomb.rangeCheck(gCanvas.getUser2())) {
-											gameOver = true; 
-											gCanvas.setScreen(2);
-											gCanvas.repaint();
-										}
-										
 									} else if (check > 50 && check <= 80) {
 										myBomb.setFrame(4);
 										choice = false;
@@ -308,11 +296,13 @@ public class GameFrame extends JFrame {
 							}
 						}
 					}
+					
 					if(restart){
 						bombable.clear();
 						myBomb.resetCounter();
 						start = false;
 						bombSet = false;
+						gameOver = false;
 						restart = false;
 						myBomb.setFrame(5);
 						bombCounter = false;
@@ -360,7 +350,7 @@ public class GameFrame extends JFrame {
 		
 		public void run() {
 			try {
-				while(!gameOver) {
+				while(true) {
 					int enX = dataIn.readInt();
 					int enY = dataIn.readInt();
 					int enBX = dataIn.readInt();
@@ -373,8 +363,7 @@ public class GameFrame extends JFrame {
 						enemyBomb.setX(enBX);
 						enemyBomb.setY(enBY);
 						enemyBomb.setFrame(enBF);
-					}
-		
+						
 						if (playerID == 1){
 							option1 = dataIn.readBoolean();
 							int newIndex1 = dataIn.readInt();
@@ -403,9 +392,26 @@ public class GameFrame extends JFrame {
 								System.out.println(oldIndex2);
 								first2 = false;
 							} 
-						}	
-					
-					
+						}
+						
+						if (myBomb.rangeCheck(gCanvas.getUser()) && myBomb.getFrame() == 4) {
+							gameOver = true; 
+							gCanvas.setScreen(3);
+							gCanvas.repaint();
+						} else if (myBomb.rangeCheck(gCanvas.getUser2()) && myBomb.getFrame() == 4) {
+							gameOver = true; 
+							gCanvas.setScreen(2);
+							gCanvas.repaint();
+						} else if (enemyBomb.rangeCheck(gCanvas.getUser()) && enBF == 4) {
+							gameOver = true;
+							gCanvas.setScreen(3);
+							gCanvas.repaint();
+						} else if (enemyBomb.rangeCheck(gCanvas.getUser2()) && enBF == 4) {
+							gameOver = true;
+							gCanvas.setScreen(2);
+							gCanvas.repaint();
+						}
+					}
 				}
 					
 			} catch(IOException ex) {
@@ -437,7 +443,7 @@ public class GameFrame extends JFrame {
 		
 		public void run() {
 			try {
-				while(!gameOver) {
+				while(true) {
 					if (me != null) {
 						dataOut.writeInt(me.getX());
 						dataOut.writeInt(me.getY());

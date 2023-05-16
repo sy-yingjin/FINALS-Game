@@ -15,6 +15,16 @@ that has been clearly noted with a proper citation in the comments
 of my program.
 */
 
+/**
+	The Server file passes data and coordinates between players
+	the most important data the server passes is the boolean to check
+	if the bomb has collided with a crate for one player and
+	passes that information to the other player
+	because each player has their own arraylist of crates
+	
+	it also passes the frame and state of a player's bomb
+	to the other player.
+**/
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,28 +44,24 @@ public class GameServer {
 	private WriteToClient p1WriteRunnable;
 	private WriteToClient p2WriteRunnable;
 	
-	private int crateStatus;
-	private int crateIndex;
-	private boolean explode, destroy, bombSet1, bombSet2;
-	
 	private int p1x, p1y, b1x, b1y, b1f;
 	private int p2x, p2y, b2x, b2y, b2f;
 
 	private boolean b1b, b2b;
 	private int counter, index1, index2;
 
-	
-	
 	public GameServer() {
 		System.out.println("==== GAME SERVER ====");
 		numPlayers = 0;
 		maxPlayers = 2;
 		
+		//original coordinates of p1 and p2
 		p1x = 0;
 		p1y = 0;
 		p2x = 400;
 		p2y = 400;
 		
+		//original coordinates of bomb 1 and bomb 2
 		b1x = 0;
 		b1y = 0;
 		b2x = 400;
@@ -63,6 +69,7 @@ public class GameServer {
 		
 		counter = 0;
 		
+		//server socket
 		try {
 			ss = new ServerSocket(51234);
 		} catch(IOException ex) {
@@ -70,6 +77,9 @@ public class GameServer {
 		}
 	}
 	
+	/**
+		starts the readthreads and writethreads and accepts players into the server
+	**/
 	public void acceptConnection() {
 		try {
 			System.out.println("Waiting for connections. . .");
@@ -94,6 +104,8 @@ public class GameServer {
 					p2Socket = s;
 					p2ReadRunnable = rfc;
 					p2WriteRunnable = wtc;
+					
+					//once player 2 joins everything will start and the startmsg will be sent
 					p1WriteRunnable.sendStartMsg();
 					p2WriteRunnable.sendStartMsg();
 					Thread readThread1 = new Thread(p1ReadRunnable);
@@ -129,6 +141,13 @@ public class GameServer {
 			try {
 				while(true) {
 					
+					/**
+						Server receives player 1 and player 2's information 
+						It needs player coordinates, bomb coordinates, bomb frame for
+						it to show up on the other player's screen
+						it needs a boolean and index to show whether the bomb has collided with
+						a crate or not
+					**/
 					if (playerID == 1) {
 						p1x = dataIn.readInt();
 						p1y = dataIn.readInt();
@@ -167,6 +186,9 @@ public class GameServer {
 			try {
 				while(true) {
 					
+					/**
+						passes player 1's information to player 2
+					**/
 					if(playerID == 1) {
 						dataOut.writeInt(p2x);
 						dataOut.writeInt(p2y);
@@ -186,13 +208,27 @@ public class GameServer {
 					}
 					dataOut.flush();
 					
+					/**
+						counter is mainly here to make sure b1b and b2b don't loop
+						and continuously give a true to the other player after
+						it's done its job
+						b1b/b2b only needs to  be true once to remove the index that
+						collided with the bomb
+						
+						after entering the loop, counter will always be >= 1 so it will
+						only be true once
+					**/
 					counter ++;
 					
 					if (counter >= 1) {
 						b1b = false;
 						b2b = false;
 					}
-				
+					
+					
+					/**
+						stops the thread from running too frequently and too fast
+					**/
 					try {
 						Thread.sleep(54321);
 					} catch(InterruptedException ex) {
@@ -204,6 +240,9 @@ public class GameServer {
 			}
 		}
 		
+		/**
+			start message to let both players know that two players have connected to the server
+		**/
 		public void sendStartMsg() {
 			try {
 				dataOut.writeUTF("We now have 2 players, Go!");

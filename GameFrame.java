@@ -44,6 +44,7 @@ public class GameFrame extends JFrame {
 	private Timer timer;
 	private boolean first1, first2;
 	private int oldIndex1, newIndex1, oldIndex2, newIndex2;
+	
 	//for server
 	private Socket socket;
 	private ReadFromServer rfsRunnable;
@@ -81,8 +82,11 @@ public class GameFrame extends JFrame {
 		setUpKeyListener();
 	}
 
-	//creates players by accessing the player arraylist from GameCanvas
-	//some lines are commented since no networking stuffs yet
+	/**
+		creates players by linking the user to a character from GameCanvas
+		who gets who will depend on who connects first
+		first to connect will be Chick while the second will be spicy
+	**/
 	private void createPlayers(){
 		if(playerID == 1){
 			me = gCanvas.getUser();
@@ -96,7 +100,8 @@ public class GameFrame extends JFrame {
 			myBomb = gCanvas.getBomb2();
 		}	
 	}
-
+	
+	// Controls are WASD, Space, O K
 	private void setUpKeyListener() {
 		KeyListener kl = new KeyListener() {
 			public void keyTyped(KeyEvent ke) {
@@ -155,7 +160,6 @@ public class GameFrame extends JFrame {
 		};
 		contentPane.addKeyListener(kl);
 		contentPane.setFocusable(true);
-		
 	}	
 	
 	private void setUpAnimationTimer() {
@@ -166,6 +170,9 @@ public class GameFrame extends JFrame {
 			public void actionPerformed(ActionEvent ae) {
 				if(start){
 					gCanvas.repaint();
+					
+					//controls movement and player sprite changes
+					//additional conditions are for when the players presses multiple keys at the same time
 					if(up && !down && !left && !right) {
 						me.moveV(-speed);
 						me.spriteChange();
@@ -184,7 +191,13 @@ public class GameFrame extends JFrame {
 						gCanvas.repaint();
 						
 					} else if(space && bombCounter == false) {
-						//create a bomb
+						
+						/**
+							create a bomb
+							bombset is to start the animation for the bomb to change frames
+							bombCounter is to check how many bombs the player has dropped
+							since the player can only drop 1 bomb at a time.
+						**/
 						myBomb.setX(me.getX());
 						myBomb.setY(me.getY());
 						bombSet = true;
@@ -194,6 +207,13 @@ public class GameFrame extends JFrame {
 							timer = new Timer(80, new ActionListener(){
 								@Override
 								public void actionPerformed(ActionEvent e){
+									
+									/**
+										check is for the Bomb java file to know how far along the animation
+										the bomb dropped is currently in to call the right frame
+										bomb detection for collision against crates will only start at frame 3, which
+										is when the bomb frame is on a mini explosion
+									**/
 									int check = myBomb.checkCounter();
 									if (check <= 20) {
 										myBomb.setFrame(1);
@@ -208,15 +228,21 @@ public class GameFrame extends JFrame {
 										myBomb.addCounter();
 										gCanvas.repaint();
 										for (Crate c : bombable) {
+											
+											/**
+												Type 1 is just an animation for a crate being destroyed
+												if check == 50 (exact amount so the loop doesn't repeatedly send data)
+												it will collect the index of the crate that collided with the bomb explosion
+												remove that crate on their arraylist and
+												send a confirmation (choice) that the crate was hit
+											**/
 											if(myBomb.rangeCheck(c)){
 												c.setType(1);
 												gCanvas.repaint();
 												if (check == 50){
 												crateIndex = bombable.indexOf(c);
 												choice = true;
-												System.out.println("Index: " + crateIndex);
 												gCanvas.removeCrate(crateIndex);
-												System.out.println("ArraySize = "+ bombable.size());
 												gCanvas.repaint();	
 												}
 												break;
@@ -234,6 +260,11 @@ public class GameFrame extends JFrame {
 										max = true;
 									}
 		
+									/**
+										Max is to show whether the bomb animation is done or not
+										if yes, it will stop the bomb timer and reset the counter to 0
+										for when the next bomb is dropped
+									**/
 									if (max){
 										timer.stop();
 										timer.setRepeats(false);					
@@ -325,6 +356,11 @@ public class GameFrame extends JFrame {
 						}
 					}
 					
+					/**
+						if the player wants to reset the game
+						they press K which will undo everything in the map and start from the beginning
+						everything will be back to how it was before + back to the original titlescreen
+					**/
 					if(restart){
 						bombable.clear();
 						myBomb.resetCounter();
@@ -350,6 +386,7 @@ public class GameFrame extends JFrame {
 	}
 
 	//taken from choobtorials
+	//connects a player to the gameserver
 	public void connectToServer() {
 		try {
  			socket = new Socket("localhost", port);
@@ -380,6 +417,11 @@ public class GameFrame extends JFrame {
 		public void run() {
 			try {
 				while(true) {
+					
+					/**
+						receives information from the server about the other player
+						so that they can show up on the GUI
+					**/
 					int enX = dataIn.readInt();
 					int enY = dataIn.readInt();
 					int enBX = dataIn.readInt();
@@ -393,6 +435,15 @@ public class GameFrame extends JFrame {
 						enemyBomb.setY(enBY);
 						enemyBomb.setFrame(enBF);
 						
+						/**
+							bomb collision detector with the player
+							it checks what frame the bombs are first and checks
+							whether the sprites of the players are hit by the explosion
+							before showing the players who wins or loses
+							
+							if spicy is hit by any bomb, it will show an endscreen of chick winning
+							and vice versa
+						**/
 						if (myBomb.rangeCheck(gCanvas.getUser()) && myBomb.getFrame() == 4) {
 							gCanvas.setScreen(3);
 							gCanvas.repaint();
@@ -411,33 +462,29 @@ public class GameFrame extends JFrame {
 							gCanvas.restart();
 						}
 						
+						/**
+							checks whether the index is being repeated/looped
+							this was the best solution we could come up with to stop 
+							the information being received from repeating twice or thrice
+						**/
 						if (playerID == 1){
 							option1 = dataIn.readBoolean();
 							int newIndex1 = dataIn.readInt();
 							if (((option1 && first1)||(oldIndex1!=newIndex1))){
-								System.out.println("Index received.");
 								gCanvas.removeCrate(newIndex1);
-								System.out.println(newIndex1);
 								gCanvas.repaint();
-								System.out.println(bombable.size());
 								option1 = false;
 								oldIndex1 = newIndex1;
-								System.out.println(oldIndex1);
 								first1 = false;
 							} 
-						} 
-						else {
+						} else {
 							option2 = dataIn.readBoolean();
 							int newIndex2 = dataIn.readInt();
 							if (((option2 && first2)||(oldIndex2!=newIndex2))){
-								System.out.println("Index received.");
 								gCanvas.removeCrate(newIndex2);
-								System.out.println(newIndex2);
 								gCanvas.repaint();
-								System.out.println(bombable.size());
 								option2 = false;
 								oldIndex2 = newIndex2;
-								System.out.println(oldIndex2);
 								first2 = false;
 							} 
 						}
@@ -476,6 +523,13 @@ public class GameFrame extends JFrame {
 			try {
 				while(true) {
 					if (me != null) {
+						
+						/**
+							sends player coordinates, bomb coordinates, bomb frame
+							collision boolean and index bomb collided with
+							to the server
+							for the server to send to the other player
+						**/
 						dataOut.writeInt(me.getX());
 						dataOut.writeInt(me.getY());
 						dataOut.writeInt(myBomb.getX());

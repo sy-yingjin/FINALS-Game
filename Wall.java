@@ -1,3 +1,25 @@
+/**
+This is a template for a Java file.
+@author Shaira Sy (226043), Sherrie Del Rosario (222075)
+@version May 16, 2023
+**/
+/*
+I have not discussed the Java language code in my program
+with anyone other than my instructor or the teaching assistants
+assigned to this course.
+I have not used Java language code obtained from another student,
+or any other unauthorized source, either modified or unmodified.
+If any Java language code or documentation used in my program
+was obtained from another source, such as a textbook or website,
+that has been clearly noted with a proper citation in the comments
+of my program.
+*/
+
+/** This program creates a class for walls. 
+*It implements the Thing interface
+*It holds methods for collisions that allows it to not be destroyed by the bomb
+*/
+
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.*;
@@ -16,6 +38,9 @@ public class Wall implements Thing{
         wallImage();
     }
 
+    /* This method extracts image files from the Sprites folder
+     * This is the image for a block or wall 
+     */
     public void wallImage(){
         try{
             block = ImageIO.read(getClass().getResourceAsStream("/Sprites/block.png"));
@@ -24,30 +49,45 @@ public class Wall implements Thing{
         }
     }
 	
+     /* This method moves returns the x coordinate
+     */
     public int getX(){
         return x;
     }
 
+     /* This method moves returns the y coordinate
+     */
     public int getY(){
         return y;
     }
 
+    /* This method updates the x coordinate
+     */
     public void setX(int n){
         x = n;
     }
 
+    /* This method updates the y coordinate
+     */
     public void setY(int n){
         y = n;
     }
 
+    /* This method returns the height
+     */
     public int getHeight(){
         return height;
     }
 
+    /* This method returns the width
+     */
     public int getWidth(){
         return width;
     }
 	
+     /** This returns a boolean that checks for collision
+     * this checks that the wall is colliding with a Thing object
+     */
 	public boolean isColliding(Thing r) {
 		
         if ( this.x + this.width <= r.getX() || // from left side
@@ -61,6 +101,9 @@ public class Wall implements Thing{
         }
     }
 
+     /** This draws the wall. 
+        it will not have any changes
+     */
     public void draw(Graphics2D g){
         g.drawImage(block,x,y,width,height,null);
 

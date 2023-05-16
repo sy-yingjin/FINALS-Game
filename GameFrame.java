@@ -1,9 +1,33 @@
+/**
+This is a template for a Java file.
+@author Shaira Sy (226043), Sherrie Del Rosario (222075)
+@version May 16, 2023
+**/
+/*
+I have not discussed the Java language code in my program
+with anyone other than my instructor or the teaching assistants
+assigned to this course.
+I have not used Java language code obtained from another student,
+or any other unauthorized source, either modified or unmodified.
+If any Java language code or documentation used in my program
+was obtained from another source, such as a textbook or website,
+that has been clearly noted with a proper citation in the comments
+of my program.
+*/
+
+/** This program creates a class for the Game Frame. 
+*It has timers for the canvas repaints and animation of the game
+*It updates based on the player's actions  (me) and networking from the other player's (enemy).
+*It also has the GUI and the Key Listeners for the controls.
+*/ 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList; 
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 public class GameFrame extends JFrame {
 	private Container contentPane;
@@ -24,6 +48,7 @@ public class GameFrame extends JFrame {
 	private Socket socket;
 	private ReadFromServer rfsRunnable;
 	private WriteToServer wtsRunnable;
+	private int port;
  
 
 	public GameFrame(int w, int h) {
@@ -45,6 +70,9 @@ public class GameFrame extends JFrame {
 		contentPane.add(gCanvas, BorderLayout.CENTER);
 		
 		this.setTitle("Fry-A-Chick! Player#" + playerID);
+		Scanner number = new Scanner(System.in);
+		System.out.println("Enter username");
+		port = number.nextInt();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);	
@@ -311,6 +339,8 @@ public class GameFrame extends JFrame {
 						gCanvas.title();
 						bombable = gCanvas.getBombable();
 						gCanvas.repaint();
+						first1 = true;
+						first2 = true;
 					}
 				}
 			}
@@ -322,7 +352,7 @@ public class GameFrame extends JFrame {
 	//taken from choobtorials
 	public void connectToServer() {
 		try {
- 			socket = new Socket("localhost", 51234);
+ 			socket = new Socket("localhost", port);
  			DataInputStream in = new DataInputStream(socket.getInputStream());
  			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			
@@ -366,21 +396,25 @@ public class GameFrame extends JFrame {
 						if (myBomb.rangeCheck(gCanvas.getUser()) && myBomb.getFrame() == 4) {
 							gCanvas.setScreen(3);
 							gCanvas.repaint();
+							gCanvas.restart();
 						} else if (myBomb.rangeCheck(gCanvas.getUser2()) && myBomb.getFrame() == 4) {
 							gCanvas.setScreen(2);
 							gCanvas.repaint();
+							gCanvas.restart();
 						} else if (enemyBomb.rangeCheck(gCanvas.getUser()) && enBF == 4) {
 							gCanvas.setScreen(3);
 							gCanvas.repaint();
+							gCanvas.restart();
 						} else if (enemyBomb.rangeCheck(gCanvas.getUser2()) && enBF == 4) {
 							gCanvas.setScreen(2);
 							gCanvas.repaint();
+							gCanvas.restart();
 						}
 						
 						if (playerID == 1){
 							option1 = dataIn.readBoolean();
 							int newIndex1 = dataIn.readInt();
-							if ((option1 && first1)||(oldIndex1!=newIndex1)){
+							if (((option1 && first1)||(oldIndex1!=newIndex1))){
 								System.out.println("Index received.");
 								gCanvas.removeCrate(newIndex1);
 								System.out.println(newIndex1);
@@ -391,10 +425,11 @@ public class GameFrame extends JFrame {
 								System.out.println(oldIndex1);
 								first1 = false;
 							} 
-						} else {
+						} 
+						else {
 							option2 = dataIn.readBoolean();
 							int newIndex2 = dataIn.readInt();
-							if ((option2 && first2)||(oldIndex2!=newIndex2)){
+							if (((option2 && first2)||(oldIndex2!=newIndex2))){
 								System.out.println("Index received.");
 								gCanvas.removeCrate(newIndex2);
 								System.out.println(newIndex2);

@@ -1,6 +1,10 @@
+/**
+ * This program creates a class for the Game Canvas. 
+*It draws all the images and also has methods that allows the sprites to be called in the Game Frame.
+*/
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
-
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;

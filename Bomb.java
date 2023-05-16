@@ -1,3 +1,26 @@
+/**
+This is a template for a Java file.
+@author Shaira Sy (226043), Sherrie Del Rosario (222075)
+@version May 16, 2023
+**/
+/*
+I have not discussed the Java language code in my program
+with anyone other than my instructor or the teaching assistants
+assigned to this course.
+I have not used Java language code obtained from another student,
+or any other unauthorized source, either modified or unmodified.
+If any Java language code or documentation used in my program
+was obtained from another source, such as a textbook or website,
+that has been clearly noted with a proper citation in the comments
+of my program.
+*/
+
+/**
+ * This program creates a class for bombs. 
+*It implements the Thing interface
+*It holds methods for collision checks and explosion frames
+*/
+
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.*;
@@ -21,6 +44,10 @@ public class Bomb implements Thing{
 		counter = 0;
     }
 
+    /* This method extracts image files from the Sprites folder
+    * This is the animation squence for the bomb to explode
+     */
+
     public void bombImage(){
         try{
             bomb1 = ImageIO.read(getClass().getResourceAsStream("/Sprites/bomb 1.png"));
@@ -33,30 +60,44 @@ public class Bomb implements Thing{
         }
     }   
     
+     /* This method moves returns the x coordinate
+     */
     public int getX(){
         return x;
     }
 
+    /* This method moves returns the y coordinate
+     */
     public int getY(){
         return y;
     }
 
+    /* This method updates the x coordinate
+     */
     public void setX(int n){
         x = n;
     }
 
+     /* This method updates the x coordinate
+     */
     public void setY(int n){
         y = n;
     }
 
+     /* This method returns the height
+     */
     public int getHeight(){
         return height;
     }
 
+    /* This method returns the width
+     */
     public int getWidth(){
         return width;
     }
 	
+    /* This method returns the width
+     */
 	public void setFrame(int i) {
 		frame = i;
 	}
@@ -125,7 +166,11 @@ public class Bomb implements Thing{
 				return false;
 		}
 	}
-	
+
+	 /** This draws the bomb. 
+     * Depending on the frame it will show a different frame. 
+     * It will also draw the explosion if the conditions are met
+     */
     public void draw(Graphics2D g){
         switch(frame){
             //changes the image of the bomb shown

@@ -1,3 +1,21 @@
+/**
+This is a template for a Java file.
+@author Shaira Sy (226043), Sherrie Del Rosario (222075)
+@version May 16, 2023
+**/
+/*
+I have not discussed the Java language code in my program
+with anyone other than my instructor or the teaching assistants
+assigned to this course.
+I have not used Java language code obtained from another student,
+or any other unauthorized source, either modified or unmodified.
+If any Java language code or documentation used in my program
+was obtained from another source, such as a textbook or website,
+that has been clearly noted with a proper citation in the comments
+of my program.
+*/
+
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
@@ -176,7 +194,7 @@ public class GameServer {
 					}
 				
 					try {
-						Thread.sleep(40);
+						Thread.sleep(54321);
 					} catch(InterruptedException ex) {
 						System.out.println("InterruptedException from WTC run()");
 					}

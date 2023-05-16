@@ -11,7 +11,7 @@ public class GameFrame extends JFrame {
 	private Timer animationTimer;
 	private int speed, width, height, crateIndex;
 	private boolean up, down, left, right, space, start, restart, choice;
-	private boolean max, bombCounter, bombSet, gameOver, option1, option2;
+	private boolean max, bombCounter, bombSet, option1, option2;
 	private Player me, enemy;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Wall> unMovable;
@@ -302,7 +302,6 @@ public class GameFrame extends JFrame {
 						myBomb.resetCounter();
 						start = false;
 						bombSet = false;
-						gameOver = false;
 						restart = false;
 						myBomb.setFrame(5);
 						bombCounter = false;
@@ -364,6 +363,20 @@ public class GameFrame extends JFrame {
 						enemyBomb.setY(enBY);
 						enemyBomb.setFrame(enBF);
 						
+						if (myBomb.rangeCheck(gCanvas.getUser()) && myBomb.getFrame() == 4) {
+							gCanvas.setScreen(3);
+							gCanvas.repaint();
+						} else if (myBomb.rangeCheck(gCanvas.getUser2()) && myBomb.getFrame() == 4) {
+							gCanvas.setScreen(2);
+							gCanvas.repaint();
+						} else if (enemyBomb.rangeCheck(gCanvas.getUser()) && enBF == 4) {
+							gCanvas.setScreen(3);
+							gCanvas.repaint();
+						} else if (enemyBomb.rangeCheck(gCanvas.getUser2()) && enBF == 4) {
+							gCanvas.setScreen(2);
+							gCanvas.repaint();
+						}
+						
 						if (playerID == 1){
 							option1 = dataIn.readBoolean();
 							int newIndex1 = dataIn.readInt();
@@ -394,23 +407,6 @@ public class GameFrame extends JFrame {
 							} 
 						}
 						
-						if (myBomb.rangeCheck(gCanvas.getUser()) && myBomb.getFrame() == 4) {
-							gameOver = true; 
-							gCanvas.setScreen(3);
-							gCanvas.repaint();
-						} else if (myBomb.rangeCheck(gCanvas.getUser2()) && myBomb.getFrame() == 4) {
-							gameOver = true; 
-							gCanvas.setScreen(2);
-							gCanvas.repaint();
-						} else if (enemyBomb.rangeCheck(gCanvas.getUser()) && enBF == 4) {
-							gameOver = true;
-							gCanvas.setScreen(3);
-							gCanvas.repaint();
-						} else if (enemyBomb.rangeCheck(gCanvas.getUser2()) && enBF == 4) {
-							gameOver = true;
-							gCanvas.setScreen(2);
-							gCanvas.repaint();
-						}
 					}
 				}
 					

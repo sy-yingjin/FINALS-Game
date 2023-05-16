@@ -131,6 +131,7 @@ public class GameServer {
 						b2b = dataIn.readBoolean();
 						index2 = dataIn.readInt();
 					}
+					
 
 				}
 			} catch(IOException ex) {
@@ -180,7 +181,7 @@ public class GameServer {
 					}
 				
 					try {
-						Thread.sleep(20);
+						Thread.sleep(40);
 					} catch(InterruptedException ex) {
 						System.out.println("InterruptedException from WTC run()");
 					}

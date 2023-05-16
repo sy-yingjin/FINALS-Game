@@ -11,18 +11,21 @@ public class GameFrame extends JFrame {
 	private Timer animationTimer;
 	private int speed, width, height, crateIndex;
 	private boolean up, down, left, right, space, start, restart, choice;
-	private boolean max, bombCounter, bombSet, gameOver;
+	private boolean max, bombCounter, bombSet, gameOver, option1, option2;
 	private Player me, enemy;
 	private ArrayList<Crate> bombable;
 	private ArrayList<Wall> unMovable;
 	private int playerID;
 	private Bomb myBomb, enemyBomb;
 	private Timer timer;
-	
+	private boolean first1, first2;
+	private int oldIndex1, newIndex1, oldIndex2, newIndex2;
+	private ReentrantLock mutex = new ReentrantLock();
 	//for server
 	private Socket socket;
 	private ReadFromServer rfsRunnable;
 	private WriteToServer wtsRunnable;
+ 
 
 	public GameFrame(int w, int h) {
 		width = w;
@@ -31,6 +34,8 @@ public class GameFrame extends JFrame {
 		speed = 25;
 		bombable = gCanvas.getBombable();
 		unMovable = gCanvas.getUnmovable();
+		first1 = true;
+		first2 = true;
 	}
 	
 	public void setUpGUI() {
@@ -192,6 +197,7 @@ public class GameFrame extends JFrame {
 										}
 										
 										if (myBomb.rangeCheck(gCanvas.getUser())) {
+											
 											gameOver = true; 
 											gCanvas.setScreen(3);
 											gCanvas.repaint();
@@ -304,15 +310,16 @@ public class GameFrame extends JFrame {
 					}
 					if(restart){
 						bombable.clear();
-						gCanvas.restart();
 						myBomb.resetCounter();
 						start = false;
 						bombSet = false;
 						restart = false;
 						myBomb.setFrame(5);
 						bombCounter = false;
-						//timer.stop();
+						timer.stop();
 						timer.setRepeats(false);
+						gCanvas.restart();
+						gCanvas.title();
 						bombable = gCanvas.getBombable();
 						gCanvas.repaint();
 					}
@@ -367,16 +374,37 @@ public class GameFrame extends JFrame {
 						enemyBomb.setY(enBY);
 						enemyBomb.setFrame(enBF);
 					}
+		
+						if (playerID == 1){
+							option1 = dataIn.readBoolean();
+							int newIndex1 = dataIn.readInt();
+							if ((option1 && first1)||(oldIndex1!=newIndex1)){
+								System.out.println("Index received.");
+								gCanvas.removeCrate(newIndex1);
+								System.out.println(newIndex1);
+								gCanvas.repaint();
+								System.out.println(bombable.size());
+								option1 = false;
+								oldIndex1 = newIndex1;
+								System.out.println(oldIndex1);
+								first1 = false;
+							} 
+						} else {
+							option2 = dataIn.readBoolean();
+							int newIndex2 = dataIn.readInt();
+							if ((option2 && first2)||(oldIndex2!=newIndex2)){
+								System.out.println("Index received.");
+								gCanvas.removeCrate(newIndex2);
+								System.out.println(newIndex2);
+								gCanvas.repaint();
+								System.out.println(bombable.size());
+								option2 = false;
+								oldIndex2 = newIndex2;
+								System.out.println(oldIndex2);
+								first2 = false;
+							} 
+						}	
 					
-					boolean option = dataIn.readBoolean();
-					int index = dataIn.readInt();
-					
-					if (option) {
-						System.out.println("Index received.");
-						gCanvas.removeCrate(index);
-						gCanvas.repaint();
-						System.out.println(bombable.size());
-					}
 					
 				}
 					
@@ -422,7 +450,7 @@ public class GameFrame extends JFrame {
 					}
 					
 					try {
-						Thread.sleep(20);
+						Thread.sleep(40);
 					} catch(InterruptedException ex) {
 						System.out.println("InterruptedException from WTS run()");
 					}

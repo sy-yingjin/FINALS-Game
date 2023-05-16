@@ -162,9 +162,11 @@ public class GameCanvas extends JComponent {
 		bombable.remove(i);
 	}
 	
+	public void title(){
+		titleScreen = 1;
+	}
 
 	public void restart(){
-		titleScreen = 1;
 		bomb1.setFrame(5);
 		bomb2.setFrame(5);
 

@@ -242,6 +242,7 @@ public class GameFrame extends JFrame {
 												if (check == 50){
 												crateIndex = bombable.indexOf(c);
 												choice = true;
+												System.out.println("index: " + crateIndex);
 												gCanvas.removeCrate(crateIndex);
 												gCanvas.repaint();	
 												}
@@ -471,16 +472,22 @@ public class GameFrame extends JFrame {
 							option1 = dataIn.readBoolean();
 							int newIndex1 = dataIn.readInt();
 							if (((option1 && first1)||(oldIndex1!=newIndex1))){
+								System.out.println("entered option1");
 								gCanvas.removeCrate(newIndex1);
+								System.out.println(newIndex1);
+								
 								gCanvas.repaint();
 								option1 = false;
 								oldIndex1 = newIndex1;
 								first1 = false;
 							} 
-						} else {
+						} 
+						if (playerID == 2) {
 							option2 = dataIn.readBoolean();
 							int newIndex2 = dataIn.readInt();
 							if (((option2 && first2)||(oldIndex2!=newIndex2))){
+								System.out.println("entered option2");
+								System.out.println(newIndex2);
 								gCanvas.removeCrate(newIndex2);
 								gCanvas.repaint();
 								option2 = false;
